@@ -469,14 +469,14 @@ main{padding:16px 14px 0;}
         <span class="set-field-icon">📅</span>
         <div class="set-field-body">
           <div class="set-field-label">주중 요금</div>
-          <input type="text" id="cfg_pw" placeholder="예: 100,000원">
+          <input type="text" id="cfg_pw" inputmode="numeric" placeholder="예: 100,000원" oninput="fmtPrice(this)">
         </div>
       </div>
       <div class="set-field">
         <span class="set-field-icon">🌅</span>
         <div class="set-field-body">
           <div class="set-field-label">주말 요금</div>
-          <input type="text" id="cfg_pwe" placeholder="예: 150,000원">
+          <input type="text" id="cfg_pwe" inputmode="numeric" placeholder="예: 150,000원" oninput="fmtPrice(this)">
         </div>
       </div>
     </div>
@@ -628,10 +628,8 @@ function togCard(key){
   if(t)t.classList.toggle('open');
 }
 
-function fmtPrice(el){
-  const raw=el.value.replace(/[^\d]/g,'');
-  el.value=raw?Number(raw).toLocaleString('ko-KR')+'원':'';
-}
+function fmtPriceVal(v){const raw=v.replace(/[^\d]/g,'');return raw?Number(raw).toLocaleString('ko-KR')+'원':'';}
+function fmtPrice(el){el.value=fmtPriceVal(el.value);}
 function renderStage(){
   const s=STAGES[curStage];
   const tmpls=allTpls(s);
@@ -817,8 +815,8 @@ function openSettings(){
   document.getElementById('cfg_wifi').value=settings.wifi||'';
   document.getElementById('cfg_wifipw').value=settings.wifipw||'';
   document.getElementById('cfg_door').value=settings.door||'';
-  document.getElementById('cfg_pw').value=settings.pw||'';
-  document.getElementById('cfg_pwe').value=settings.pwe||'';
+  document.getElementById('cfg_pw').value=fmtPriceVal(settings.pw||'');
+  document.getElementById('cfg_pwe').value=fmtPriceVal(settings.pwe||'');
   document.getElementById('setOverlay').classList.add('open');
   document.getElementById('setPanel').classList.add('open');
 }
