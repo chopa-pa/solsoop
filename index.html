@@ -476,11 +476,11 @@ main{padding:16px 14px 0;}
         <span class="set-field-icon">🚪</span>
         <div class="set-field-body">
           <div class="set-field-label">도어락 비밀번호</div>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <input type="text" id="cfg_door" placeholder="예: 1234# 또는 {전번뒷자리}" style="flex:1;">
-            <button onclick="document.getElementById('cfg_door').value='{전번뒷자리}'" style="white-space:nowrap;padding:6px 10px;font-size:11px;background:#fff3f0;border:1.5px solid #ffb8a8;border-radius:8px;color:var(--accent);font-weight:700;cursor:pointer;">전번뒷자리</button>
-          </div>
-          <div style="font-size:10px;color:#aaa;margin-top:3px;">{전번뒷자리} 사용 시 손님 전화번호 끝 4자리로 자동 치환</div>
+          <input type="text" id="cfg_door" placeholder="예: 1234#" style="margin-bottom:8px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#555;">
+            <input type="checkbox" id="cfg_door_auto" onchange="toggleDoorAuto()" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+            손님 전화번호 뒷자리 자동 사용
+          </label>
         </div>
       </div>
     </div>
@@ -540,7 +540,7 @@ main{padding:16px 14px 0;}
 const SK_SET='solsoop_set_v1';
 const SK_TPL='solsoop_tpl_v1';
 
-let settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:'',pw:'',pwe:''};
+let settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:'',doorAuto:false,pw:'',pwe:''};
 let childCount=0;
 let curStage=0;
 let editState={};
@@ -627,7 +627,7 @@ function applyVars(raw){
     '{와이파이}':settings.wifi||'{와이파이}',
     '{와이파이비번}':settings.wifipw||'{와이파이비번}',
     '{전번뒷자리}':(()=>{const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{전번뒷자리}';})(),
-    '{비번}':(()=>{const d=settings.door||'';return d==='{전번뒷자리}'?(()=>{const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{비번}';})():d||'{비번}';})(),
+    '{비번}':(()=>{if(settings.doorAuto){const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{비번}';}return settings.door||'{비번}';})(),
     '{주중요금}':settings.pw||'{주중요금}',
     '{주말요금}':settings.pwe||'{주말요금}',
   };
@@ -852,6 +852,8 @@ function openSettings(){
   document.getElementById('cfg_wifi').value=settings.wifi||'';
   document.getElementById('cfg_wifipw').value=settings.wifipw||'';
   document.getElementById('cfg_door').value=settings.door||'';
+  document.getElementById('cfg_door_auto').checked=!!settings.doorAuto;
+  document.getElementById('cfg_door').disabled=!!settings.doorAuto;
   document.getElementById('cfg_pw').value=fmtPriceVal(settings.pw||'');
   document.getElementById('cfg_pwe').value=fmtPriceVal(settings.pwe||'');
   document.getElementById('setOverlay').classList.add('open');
@@ -869,6 +871,7 @@ function saveSettings(){
     wifi:document.getElementById('cfg_wifi').value.trim(),
     wifipw:document.getElementById('cfg_wifipw').value.trim(),
     door:document.getElementById('cfg_door').value.trim(),
+    doorAuto:document.getElementById('cfg_door_auto').checked,
     pw:document.getElementById('cfg_pw').value.trim(),
     pwe:document.getElementById('cfg_pwe').value.trim(),
   };
@@ -877,11 +880,19 @@ function saveSettings(){
   toast('저장됐어요 ✓');
   renderStage();
 }
+function toggleDoorAuto(){
+  const chk=document.getElementById('cfg_door_auto').checked;
+  const inp=document.getElementById('cfg_door');
+  inp.disabled=chk;
+  if(chk)inp.value='';
+}
 function confirmResetSettings(){
   showConfirmModal('설정 초기화','모든 설정이 삭제됩니다. 계속하시겠어요?',()=>{
-    settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:'',pw:'',pwe:''};
+    settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:'',doorAuto:false,pw:'',pwe:''};
     localStorage.removeItem(SK_SET);
     ['cfg_name','cfg_addr','cfg_account','cfg_wifi','cfg_wifipw','cfg_door','cfg_pw','cfg_pwe'].forEach(id=>{document.getElementById(id).value='';});
+    document.getElementById('cfg_door_auto').checked=false;
+    document.getElementById('cfg_door').disabled=false;
     toast('설정이 초기화됐어요');renderStage();
   });
 }
