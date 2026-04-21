@@ -1,0 +1,9 @@
+{
+  "name": "솔숲 문자",
+  "short_name": "솔숲",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF6B4A",
+  "icons": []
+}

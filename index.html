@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>솔숲 문자</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#FF6B4A;
+  --ink:#1C1C1E;
+  --ink-light:#8E8E93;
+  --border:#E5E5EA;
+  --bg:#F2F2F7;
+  --cream:#FAFAFA;
+  --shadow:rgba(0,0,0,0.08);
+  --c1:#9B6B4A;--c2:#6B5B8B;--c3:#B8734A;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:20px;}
+
+/* HEADER */
+header{background:white;border-bottom:1px solid var(--border);padding:0 16px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px var(--shadow);}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;height:56px;}
+.hdr-title{font-size:17px;font-weight:700;color:var(--ink);}
+.hdr-btn{background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--ink-light);font-size:13px;}
+.hdr-btn:active{background:var(--border);}
+
+/* STAGE TABS */
+.stabs{display:flex;overflow-x:auto;background:white;border-bottom:1px solid var(--border);scrollbar-width:none;position:sticky;top:56px;z-index:50;padding:0 6px;}
+.stabs::-webkit-scrollbar{display:none;}
+.stab{flex:none;padding:12px 16px;font-size:13px;font-weight:500;color:var(--ink-light);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;font-family:'Noto Sans KR',sans-serif;}
+.stab .ti{font-size:15px;margin-right:4px;}
+.stab.active{color:var(--ink);font-weight:700;}
+.stab:nth-child(1).active{border-bottom-color:var(--c1);}
+.stab:nth-child(2).active{border-bottom-color:var(--c2);}
+.stab:nth-child(3).active{border-bottom-color:var(--c3);}
+
+/* MAIN */
+main{padding:14px 14px 0;}
+
+/* PANELS */
+.panel{background:white;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px var(--shadow);}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.panel-head h3{font-size:13px;font-weight:700;color:var(--ink-light);letter-spacing:.05em;text-transform:uppercase;}
+
+/* FORM */
+.var-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.vi{display:flex;flex-direction:column;gap:5px;}
+.vi label{font-size:11px;font-weight:600;color:var(--ink-light);}
+.vi input,.vi select{border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:14px;font-family:'Noto Sans KR',sans-serif;color:var(--ink);background:white;width:100%;outline:none;}
+.vi input:focus,.vi select:focus{border-color:var(--accent);}
+
+/* DATE RANGE BTN */
+.date-range-btn{border:1px solid var(--border);border-radius:10px;padding:9px 12px;cursor:pointer;background:white;min-height:42px;display:flex;align-items:center;}
+.drb-placeholder{font-size:13px;color:#C7C7CC;}
+.drb-side{display:flex;flex-direction:column;gap:1px;}
+.drb-label{font-size:10px;color:var(--ink-light);font-weight:600;}
+.drb-date{font-size:14px;font-weight:700;color:var(--ink);}
+.drb-sub{font-size:10px;color:var(--ink-light);}
+.drb-mid{display:flex;flex-direction:column;align-items:center;padding:0 10px;gap:2px;}
+.drb-arrow{font-size:14px;color:var(--ink-light);}
+.drb-nights{font-size:11px;font-weight:700;color:var(--accent);}
+.date-range-btn{display:flex;align-items:center;justify-content:space-between;}
+.date-range-days{font-size:11px;color:var(--ink-light);margin-top:4px;min-height:16px;}
+
+/* CHECK ROW */
+.check-row{margin-top:10px;}
+.chk-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cream);border:1px solid var(--border);border-radius:10px;cursor:pointer;margin-bottom:6px;}
+.chk-box{width:22px;height:22px;border-radius:6px;border:2px solid #C7C7CC;background:white;flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.chk-item.on .chk-box{background:var(--accent);border-color:var(--accent);}
+.chk-item.on .chk-box::after{content:'✓';color:white;font-size:13px;font-weight:700;}
+.chk-label{font-size:13px;color:var(--ink);flex:1;}
+.chk-label small{display:block;font-size:10px;color:var(--ink-light);margin-top:1px;}
+.cnt-row{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.cnt-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink);}
+
+/* STAGE */
+.stage-hdr{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.stage-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.stage-hdr h2{font-size:16px;font-weight:700;}
+.stage-desc{font-size:12px;color:var(--ink-light);margin-bottom:14px;}
+
+/* CARDS */
+.card{background:white;border-radius:14px;margin-bottom:10px;box-shadow:0 1px 6px var(--shadow);overflow:hidden;}
+.card-h{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
+.card-t{font-size:14px;font-weight:600;color:var(--ink);}
+.card-tog{font-size:12px;color:var(--ink-light);transition:transform .2s;}
+.card-b{display:none;padding:0 16px 14px;}
+.card-b.open{display:block;}
+.card-tog.open{transform:rotate(180deg);}
+.tpl-text{white-space:pre-wrap;font-size:13px;line-height:1.7;color:var(--ink);background:var(--cream);border-radius:10px;padding:12px;border:1px solid var(--border);}
+.card-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.btn{padding:8px 14px;border-radius:10px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.btn-dark{background:#3a3a3c;color:white;}
+.btn-green{background:#34C759;color:white;}
+.btn-muted{background:var(--bg);color:var(--ink-light);}
+.btn-del{background:#FFE5E5;color:#EF4444;}
+.btn-save2{background:#007AFF;color:white;}
+.tpl-edit{width:100%;min-height:120px;border:1px solid var(--border);border-radius:10px;padding:10px;font-size:13px;font-family:'Noto Sans KR',sans-serif;resize:vertical;margin-top:6px;}
+.tpl-title-edit{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Noto Sans KR',sans-serif;margin-bottom:4px;}
+
+/* VAR CHIPS */
+.var-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.var-chip{padding:4px 8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;font-size:11px;color:var(--accent);cursor:pointer;font-weight:600;}
+
+/* ADD TEMPLATE */
+.btn-add-tpl{display:block;width:100%;padding:12px;border:2px dashed var(--border);border-radius:12px;background:none;font-size:13px;color:var(--ink-light);cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:4px;}
+
+/* SETTINGS PANEL */
+.set-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;}
+.set-overlay.open{opacity:1;pointer-events:auto;}
+.set-panel{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-radius:24px 24px 0 0;z-index:201;max-height:90vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);padding-bottom:env(safe-area-inset-bottom);}
+.set-panel.open{transform:translateY(0);}
+.set-panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px;}
+.set-panel-head h2{font-size:18px;font-weight:700;}
+.set-panel-close{background:none;border:none;font-size:22px;color:var(--ink-light);cursor:pointer;}
+.set-panel-body{padding:0 16px 24px;}
+.set-section{background:white;border-radius:14px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 6px var(--shadow);}
+.set-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);}
+.set-row:last-child{border-bottom:none;}
+.set-row label{font-size:13px;font-weight:600;color:var(--ink-light);min-width:80px;flex-shrink:0;}
+.set-row input{flex:1;border:none;font-size:14px;font-family:'Noto Sans KR',sans-serif;color:var(--ink);outline:none;background:none;}
+.btn-primary{display:block;width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:4px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:#1C1C1E;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.open{display:flex;}
+.modal{background:white;border-radius:20px;padding:24px;width:100%;max-width:340px;}
+.modal h3{font-size:17px;font-weight:700;margin-bottom:8px;}
+.modal p{font-size:14px;color:var(--ink-light);margin-bottom:20px;white-space:pre-line;line-height:1.6;}
+.modal-btns{display:flex;gap:10px;}
+.modal-btns button{flex:1;padding:12px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+.modal-btn-cancel{background:var(--bg);color:var(--ink-light);}
+.modal-btn-ok{background:var(--accent);color:white;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-row">
+    <span class="hdr-title">🌲 솔숲 문자</span>
+    <button class="hdr-btn" onclick="openSettings()">⚙️ 설정</button>
+  </div>
+</header>
+
+<div class="stabs" id="stageTabs"></div>
+
+<main>
+  <!-- 손님 정보 입력 -->
+  <div class="panel">
+    <div class="panel-head">
+      <h3>손님 정보 입력</h3>
+      <button onclick="clearForm()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--ink-light);cursor:pointer;">지우기</button>
+    </div>
+    <div class="var-grid">
+      <div class="vi"><label>손님 이름</label><input type="text" id="v_name" placeholder="예: 홍길동" oninput="renderStage()" autocomplete="off"></div>
+      <div class="vi"><label>연락처</label><input type="tel" id="v_phone" placeholder="예: 010-1234-5678" oninput="fmtPhone(this)" maxlength="13"></div>
+      <div class="vi" style="grid-column:1/-1;">
+        <label>입실 · 퇴실 날짜</label>
+        <div class="date-range-btn" id="dateRangeBtn" onclick="openDatePicker()">
+          <div class="drb-placeholder">📅 날짜를 선택하세요</div>
+        </div>
+        <div id="dateRangeDays" class="date-range-days"></div>
+        <input type="hidden" id="v_checkin">
+        <input type="hidden" id="v_checkout">
+      </div>
+      <div class="vi">
+        <label>총인원</label>
+        <select id="v_guests" onchange="renderStage()">
+          <option value="">선택</option>
+          <option>1명</option><option>2명</option><option>3명</option><option>4명</option>
+          <option>5명</option><option>6명</option><option>7명</option><option>8명</option>
+        </select>
+      </div>
+      <div class="vi"><label>숙박 금액</label><input type="tel" id="v_price" placeholder="예: 150,000원" oninput="fmtPrice(this)"></div>
+    </div>
+    <div class="check-row">
+      <div style="display:flex;align-items:center;background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:8px 12px;">
+        <span style="font-size:13px;color:var(--ink);flex:1;">👶 미취학아동 <small style="font-size:10px;color:var(--ink-light);">만 7세 미만</small></span>
+        <div class="cnt-row">
+          <button class="cnt-btn" onclick="adjChild(-1)">−</button>
+          <span id="child_display" style="font-size:14px;font-weight:600;min-width:18px;text-align:center;">0</span>
+          <button class="cnt-btn" onclick="adjChild(1)">＋</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스테이지 콘텐츠 -->
+  <div id="stageContent"></div>
+</main>
+
+<!-- 설정 패널 -->
+<div class="set-overlay" id="setOverlay" onclick="closeSettings()"></div>
+<div class="set-panel" id="setPanel">
+  <div class="set-panel-head">
+    <h2>⚙️ 설정</h2>
+    <button class="set-panel-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="set-panel-body">
+    <div class="set-section">
+      <div class="set-row"><label>숙소 이름</label><input type="text" id="cfg_name" placeholder="예: 솔숲 스테이"></div>
+      <div class="set-row"><label>주소</label><input type="text" id="cfg_addr" placeholder="예: 경남 산청군..."></div>
+      <div class="set-row"><label>계좌번호</label><input type="text" id="cfg_account" placeholder="예: 국민 123-456-789"></div>
+      <div class="set-row"><label>와이파이</label><input type="text" id="cfg_wifi" placeholder="예: solsoop_5G"></div>
+      <div class="set-row"><label>와이파이 비번</label><input type="text" id="cfg_wifipw" placeholder="예: 12345678"></div>
+      <div class="set-row"><label>도어락 비번</label><input type="text" id="cfg_door" placeholder="예: 1234#"></div>
+    </div>
+    <button class="btn-primary" onclick="saveSettings()">💾 저장</button>
+  </div>
+</div>
+
+<!-- 확인 모달 -->
+<div class="modal-ov" id="confirmModal">
+  <div class="modal">
+    <h3 id="confirmTitle"></h3>
+    <p id="confirmMsg"></p>
+    <div class="modal-btns">
+      <button class="modal-btn-cancel" id="confirmCancel">취소</button>
+      <button class="modal-btn-ok" id="confirmOk">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 날짜 달력 모달 -->
+<div id="_calModal"></div>
+
+<!-- 토스트 -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* =============================================
+   DATA
+============================================= */
+const SK_SET='solsoop_set_v1';
+const SK_TPL='solsoop_tpl_v1';
+
+let settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:''};
+let childCount=0;
+let curStage=0;
+let editState={};
+let customs={};
+
+const STAGES=[
+  {id:'precheckin',icon:'🗺️',label:'입실전',color:'#9B6B4A',desc:'입실 전날 또는 당일 보내는 안내 문자예요.',
+   templates:[
+    {title:'입실 안내',body:`{이름}님, 안녕하세요 🌲\n\n내일 입실 안내 드려요!\n\n📍 주소: {주소}\n🔑 도어락: {비번}\n📶 와이파이: {와이파이} / {와이파이비번}\n\n• 입실: 오후 3시 이후\n• 퇴실: 오전 11시까지\n\n잔금 {금액}은 입실 당일 부탁드려요 😊`},
+    {title:'당일 입실 안내',body:`{이름}님, 오늘 입실 날이에요 🎉\n\n📍 {주소}\n🔑 도어락: {비번}\n\n오시는 길 막히시면 편하게 연락주세요!\n좋은 시간 되실 거예요 🌿`}
+  ]},
+  {id:'checkedin',icon:'🏡',label:'입실후',color:'#6B5B8B',desc:'체크인 후 편의시설 안내 문자예요.',
+   templates:[
+    {title:'체크인 후 안내',body:`{이름}님, 잘 도착하셨나요? 😊\n\n📶 와이파이: {와이파이}\n비번: {와이파이비번}\n\n불편한 점 있으시면 언제든 연락주세요!\n편안한 시간 되세요 🌲`}
+  ]},
+  {id:'checkout',icon:'🙏',label:'퇴실',color:'#B8734A',desc:'퇴실 후 감사 인사 문자예요.',
+   templates:[
+    {title:'퇴실 감사',body:`{이름}님, 이용해 주셔서 감사해요 🙏\n\n즐거운 시간 되셨으면 좋겠어요.\n다음에 또 솔숲에 오시면 꼭 들러주세요 😊\n\n편안하게 잘 돌아가세요 🚗`},
+    {title:'퇴실 전날 알림',body:`{이름}님, 내일이 퇴실 날이에요 😊\n\n⏰ 퇴실: 내일 오전 11시\n\n【 퇴실 시 부탁드려요 】\n• 쓰레기 문 앞 배출\n• 열쇠 현관에 걸어두기\n• 가스 밸브 잠금\n\n함께해서 행복했어요 🌿`}
+  ]}
+];
+
+const VAR_LIST=['{이름}','{입실}','{퇴실}','{인원}','{금액}','{연락처}','{아동}','{숙소}','{주소}','{계좌}','{와이파이}','{와이파이비번}','{비번}'];
+
+/* =============================================
+   INIT
+============================================= */
+function loadAll(){
+  try{const s=localStorage.getItem(SK_SET);if(s)settings={...settings,...JSON.parse(s)};}catch(e){}
+  try{
+    const t=localStorage.getItem(SK_TPL);
+    if(t){
+      const d=JSON.parse(t);
+      if(d.bodies) STAGES.forEach(s=>{const b=d.bodies[s.id];if(b)s.templates.forEach((t,i)=>{if(b[i]!==undefined)t.body=b[i];});});
+      if(d.titles) STAGES.forEach(s=>{const tt=d.titles[s.id];if(tt)s.templates.forEach((t,i)=>{if(tt[i]!==undefined)t.title=tt[i];});});
+      if(d.customs) customs=d.customs;
+    }
+  }catch(e){}
+}
+
+function saveTplStorage(){
+  const d={bodies:{},titles:{},customs};
+  STAGES.forEach(s=>{d.bodies[s.id]=s.templates.map(t=>t.body);d.titles[s.id]=s.templates.map(t=>t.title);});
+  localStorage.setItem(SK_TPL,JSON.stringify(d));
+}
+
+/* =============================================
+   FORMATTERS
+============================================= */
+function fmtPhone(el){
+  let v=el.value.replace(/\D/g,'').slice(0,11),r='';
+  if(v.length<=3)r=v;
+  else if(v.length<=7)r=v.slice(0,3)+'-'+v.slice(3);
+  else r=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7);
+  el.value=r;renderStage();
+}
+function fmtPrice(el){
+  let v=el.value.replace(/[^0-9]/g,'');
+  el.value=v?Number(v).toLocaleString('ko-KR')+'원':'';
+  renderStage();
+}
+function parseNum(s){return parseInt(String(s||'').replace(/[^0-9]/g,''))||0;}
+
+/* =============================================
+   VARS
+============================================= */
+function applyVars(raw){
+  const ci=document.getElementById('v_checkin').value;
+  const co=document.getElementById('v_checkout').value;
+  const DOW=['일','월','화','수','목','금','토'];
+  function fmt(ds){if(!ds)return '';const d=new Date(ds+'T00:00:00');return`${d.getMonth()+1}월 ${d.getDate()}일(${DOW[d.getDay()]})`;}
+  const n=ci&&co?Math.round((new Date(co)-new Date(ci))/86400000):0;
+  const child=childCount>0?`\n👶 미취학아동 ${childCount}명 동반`:'';
+  const map={
+    '{이름}':document.getElementById('v_name').value||'{이름}',
+    '{연락처}':document.getElementById('v_phone').value||'{연락처}',
+    '{입실}':fmt(ci)||'{입실}',
+    '{퇴실}':fmt(co)||'{퇴실}',
+    '{인원}':document.getElementById('v_guests').value||'{인원}',
+    '{금액}':document.getElementById('v_price').value||'{금액}',
+    '{아동}':child,
+    '{숙소}':settings.name||'{숙소}',
+    '{주소}':settings.addr||'{주소}',
+    '{계좌}':settings.account||'{계좌}',
+    '{와이파이}':settings.wifi||'{와이파이}',
+    '{와이파이비번}':settings.wifipw||'{와이파이비번}',
+    '{비번}':settings.door||'{비번}',
+  };
+  return raw.replace(/\{[^}]+\}/g,m=>map[m]!==undefined?map[m]:m);
+}
+
+function varChipsHtml(taId){
+  return`<div class="var-chips">${VAR_LIST.map(v=>`<button class="var-chip" onclick="insertVar('${v}','${taId}')">${v}</button>`).join('')}</div>`;
+}
+function insertVar(v,taId){
+  const ta=document.getElementById(taId);if(!ta)return;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  ta.value=ta.value.slice(0,s)+v+ta.value.slice(e);
+  ta.selectionStart=ta.selectionEnd=s+v.length;
+  ta.focus();
+}
+
+/* =============================================
+   STAGE TABS
+============================================= */
+function buildTabs(){
+  document.getElementById('stageTabs').innerHTML=STAGES.map((s,i)=>
+    `<button class="stab${i===0?' active':''}" onclick="switchStage(${i})"><span class="ti">${s.icon}</span>${s.label}</button>`
+  ).join('');
+}
+function switchStage(i){
+  curStage=i;
+  document.querySelectorAll('.stab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  renderStage();
+}
+function allTpls(s){return[...s.templates,...(customs[s.id]||[])];}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function togCard(key){
+  const b=document.getElementById('body-'+key);
+  const t=document.getElementById('tog-'+key);
+  if(b)b.classList.toggle('open');
+  if(t)t.classList.toggle('open');
+}
+
+function renderStage(){
+  const s=STAGES[curStage];
+  const tmpls=allTpls(s);
+  const orig=s.templates.length;
+  let html=`<div class="stage-hdr"><div class="stage-dot" style="background:${s.color}"></div><h2>${s.icon} ${s.label}</h2></div><p class="stage-desc">${s.desc}</p>`;
+  tmpls.forEach((t,i)=>{
+    const key=`${s.id}-${i}`;
+    const isEd=editState[key]!==undefined;
+    const raw=isEd?editState[key]:t.body;
+    const rend=applyVars(raw);
+    const isC=i>=orig;
+    html+=`<div class="card">
+      <div class="card-h" onclick="togCard('${key}')">
+        <span class="card-t">${esc(t.title)}</span>
+        <span class="card-tog" id="tog-${key}">▾</span>
+      </div>
+      <div class="card-b" id="body-${key}">
+        ${isEd
+          ?`<input class="tpl-title-edit" id="etitle-${key}" value="${esc(t.title)}" placeholder="템플릿 제목">
+             <textarea class="tpl-edit" id="edit-${key}">${esc(raw)}</textarea>${varChipsHtml('edit-'+key)}`
+          :`<div class="tpl-text">${esc(rend)}</div>`}
+        <div class="card-actions">
+          <button class="btn btn-dark" onclick="copyTpl('${key}',${i})">📋 복사</button>
+          <button class="btn btn-green" onclick="openSms('${key}',${i})">📱 문자</button>
+          ${isEd
+            ?`<button class="btn btn-save2" onclick="saveEdit('${key}',${i})">저장</button><button class="btn btn-muted" onclick="cancelEdit('${key}')">취소</button>`
+            :`<button class="btn btn-muted" onclick="startEdit('${key}',${i})">수정</button>`}
+          ${isC?`<button class="btn btn-del" onclick="delCustom('${s.id}',${i-orig})">삭제</button>`:''}
+        </div>
+      </div>
+    </div>`;
+  });
+  html+=`<button class="btn-add-tpl" onclick="addCustomTpl()">＋ 템플릿 추가</button>`;
+  document.getElementById('stageContent').innerHTML=html;
+}
+
+function copyTpl(key,idx){
+  const s=STAGES[curStage];
+  const raw=(editState[key]!==undefined)?editState[key]:allTpls(s)[idx].body;
+  const text=applyVars(raw);
+  navigator.clipboard.writeText(text).then(()=>toast('복사됐어요 📋')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('복사됐어요 📋');
+  });
+}
+function openSms(key,idx){
+  const s=STAGES[curStage];
+  const raw=(editState[key]!==undefined)?editState[key]:allTpls(s)[idx].body;
+  const text=applyVars(raw);
+  const phone=document.getElementById('v_phone').value.replace(/-/g,'');
+  window.location.href=`sms:${phone}${/iPhone|iPad/.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(text)}`;
+}
+function startEdit(key,idx){
+  editState[key]=allTpls(STAGES[curStage])[idx].body;
+  renderStage();
+  const b=document.getElementById('body-'+key);if(b)b.classList.add('open');
+  const t=document.getElementById('tog-'+key);if(t)t.classList.add('open');
+  const ta=document.getElementById('edit-'+key);if(ta){ta.focus();ta.value=editState[key];}
+}
+function cancelEdit(key){delete editState[key];renderStage();}
+function saveEdit(key,idx){
+  const s=STAGES[curStage];
+  const orig=s.templates.length;
+  const ta=document.getElementById('edit-'+key);
+  const ti=document.getElementById('etitle-'+key);
+  if(!ta)return;
+  const txt=ta.value;
+  if(idx<orig){s.templates[idx].body=txt;if(ti)s.templates[idx].title=ti.value||s.templates[idx].title;}
+  else{const ci=idx-orig;if(customs[s.id]&&customs[s.id][ci]){customs[s.id][ci].body=txt;if(ti)customs[s.id][ci].title=ti.value||customs[s.id][ci].title;}}
+  delete editState[key];saveTplStorage();renderStage();toast('저장됐어요 ✓');
+}
+function delCustom(sid,ci){
+  if(customs[sid])customs[sid].splice(ci,1);
+  saveTplStorage();renderStage();toast('삭제됐어요');
+}
+function addCustomTpl(){
+  const s=STAGES[curStage];
+  (customs[s.id]=customs[s.id]||[]).push({title:'새 템플릿',body:'내용을 입력하세요.'});
+  saveTplStorage();renderStage();
+  const idx=allTpls(s).length-1;
+  const key=`${s.id}-${idx}`;
+  startEdit(key,idx);
+}
+
+/* =============================================
+   CHILD COUNT
+============================================= */
+function adjChild(d){
+  childCount=Math.max(0,childCount+d);
+  document.getElementById('child_display').textContent=childCount;
+  renderStage();
+}
+
+/* =============================================
+   CLEAR FORM
+============================================= */
+function clearForm(){
+  document.getElementById('v_name').value='';
+  document.getElementById('v_phone').value='';
+  document.getElementById('v_checkin').value='';
+  document.getElementById('v_checkout').value='';
+  document.getElementById('v_guests').value='';
+  document.getElementById('v_price').value='';
+  childCount=0;
+  document.getElementById('child_display').textContent=0;
+  _cal.ci=null;_cal.co=null;
+  _updateDateDisplay();
+  renderStage();
+}
+
+/* =============================================
+   DATE PICKER
+============================================= */
+const _MN=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+let _cal={ci:null,co:null,step:'ci',y:0,m:0};
+
+function openDatePicker(){
+  const today=new Date();
+  _cal.y=today.getFullYear();_cal.m=today.getMonth();
+  _cal.ci=document.getElementById('v_checkin').value||null;
+  _cal.co=document.getElementById('v_checkout').value||null;
+  _cal.step='ci';
+  _renderCal();
+}
+function _renderCal(){
+  const y=_cal.y,m=_cal.m;
+  const today=new Date().toISOString().slice(0,10);
+  const first=new Date(y,m,1).getDay();
+  const days=new Date(y,m+1,0).getDate();
+  const DOW=['일','월','화','수','목','금','토'];
+  let g=DOW.map(d=>`<div style="text-align:center;font-size:11px;font-weight:600;color:var(--ink-light);padding:4px 0;">${d}</div>`).join('');
+  for(let i=0;i<first;i++)g+=`<div></div>`;
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isCi=ds===_cal.ci,isCo=ds===_cal.co;
+    const inRange=_cal.ci&&_cal.co&&ds>_cal.ci&&ds<_cal.co;
+    const isPast=ds<today;
+    let bg=isCi||isCo?'var(--accent)':inRange?'rgba(255,107,74,0.15)':'transparent';
+    let color=isCi||isCo?'white':isPast?'#C7C7CC':'var(--ink)';
+    const dow=(first+d-1)%7;
+    if(!isCi&&!isCo&&!isPast){if(dow===0)color='#EF4444';else if(dow===6)color='#007AFF';}
+    g+=`<div onclick="${isPast?'':'_calPick(\''+ds+'\')'}" style="text-align:center;padding:8px 2px;border-radius:50%;background:${bg};color:${color};font-size:14px;font-weight:${isCi||isCo?700:400};cursor:${isPast?'default':'pointer'};">${d}</div>`;
+  }
+  const hint=_cal.step==='ci'?'입실 날짜를 선택하세요':'퇴실 날짜를 선택하세요';
+  const ciTxt=_cal.ci?_cal.ci.slice(5).replace('-','/')+'(입실)':'미선택';
+  const coTxt=_cal.co?_cal.co.slice(5).replace('-','/')+'(퇴실)':'미선택';
+  document.getElementById('_calModal').innerHTML=`
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:flex;align-items:flex-end;">
+    <div style="background:white;border-radius:24px 24px 0 0;width:100%;padding:20px 16px 32px;max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <button onclick="_calNav(-1)" style="background:none;border:none;font-size:22px;cursor:pointer;padding:4px 10px;">‹</button>
+        <span style="font-weight:700;font-size:16px;">${y}년 ${_MN[m]}</span>
+        <button onclick="_calNav(1)" style="background:none;border:none;font-size:22px;cursor:pointer;padding:4px 10px;">›</button>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--accent);font-weight:600;margin-bottom:12px;">${hint}</p>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:12px;">${g}</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;">
+        <span style="font-size:13px;background:var(--bg);padding:6px 12px;border-radius:20px;">${ciTxt}</span>
+        <span style="font-size:13px;color:var(--ink-light);">→</span>
+        <span style="font-size:13px;background:var(--bg);padding:6px 12px;border-radius:20px;">${coTxt}</span>
+      </div>
+      <div style="display:flex;gap:10px;">
+        ${_cal.ci&&_cal.co?`<button onclick="_calConfirm()" style="flex:1;padding:13px;background:var(--accent);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">확인</button>`:''}
+        <button onclick="document.getElementById('_calModal').innerHTML=''" style="flex:1;padding:13px;background:var(--bg);color:var(--ink-light);border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">취소</button>
+      </div>
+    </div></div>`;
+}
+function _calPick(ds){
+  if(_cal.step==='ci'){_cal.ci=ds;_cal.co=null;_cal.step='co';}
+  else{if(ds<=_cal.ci){_cal.ci=ds;_cal.co=null;_cal.step='co';}else{_cal.co=ds;}}
+  _renderCal();
+}
+function _calNav(d){_cal.m+=d;if(_cal.m<0){_cal.m=11;_cal.y--;}else if(_cal.m>11){_cal.m=0;_cal.y++;}_renderCal();}
+function _calConfirm(){
+  document.getElementById('v_checkin').value=_cal.ci||'';
+  document.getElementById('v_checkout').value=_cal.co||'';
+  document.getElementById('_calModal').innerHTML='';
+  _updateDateDisplay();renderStage();
+}
+function _updateDateDisplay(){
+  const ci=document.getElementById('v_checkin').value;
+  const co=document.getElementById('v_checkout').value;
+  const btn=document.getElementById('dateRangeBtn');
+  const days=document.getElementById('dateRangeDays');
+  if(!btn)return;
+  const DOW=['일','월','화','수','목','금','토'];
+  function fmt(ds){const d=new Date(ds+'T00:00:00');return`${d.getMonth()+1}월 ${d.getDate()}일(${DOW[d.getDay()]})`;}
+  if(ci&&co){
+    const n=Math.round((new Date(co)-new Date(ci))/86400000);
+    btn.innerHTML=`<div class="drb-side ci"><span class="drb-label">📅 입실</span><span class="drb-date">${fmt(ci)}</span></div><div class="drb-mid"><span class="drb-arrow">→</span><span class="drb-nights">${n}박</span></div><div class="drb-side"><span class="drb-label">🚪 퇴실</span><span class="drb-date">${fmt(co)}</span></div>`;
+    if(days)days.textContent='';
+  } else if(ci){
+    btn.innerHTML=`<div class="drb-side ci"><span class="drb-label">📅 입실</span><span class="drb-date">${fmt(ci)}</span></div><div class="drb-mid"><span class="drb-arrow">→</span></div><div class="drb-side"><span class="drb-label" style="color:#C7C7CC;">🚪 퇴실</span><span class="drb-date" style="color:#C7C7CC;font-size:13px;">미선택</span></div>`;
+  } else {
+    btn.innerHTML=`<div class="drb-placeholder">📅 날짜를 선택하세요</div>`;
+  }
+}
+
+/* =============================================
+   SETTINGS
+============================================= */
+function openSettings(){
+  document.getElementById('cfg_name').value=settings.name||'';
+  document.getElementById('cfg_addr').value=settings.addr||'';
+  document.getElementById('cfg_account').value=settings.account||'';
+  document.getElementById('cfg_wifi').value=settings.wifi||'';
+  document.getElementById('cfg_wifipw').value=settings.wifipw||'';
+  document.getElementById('cfg_door').value=settings.door||'';
+  document.getElementById('setOverlay').classList.add('open');
+  document.getElementById('setPanel').classList.add('open');
+}
+function closeSettings(){
+  document.getElementById('setOverlay').classList.remove('open');
+  document.getElementById('setPanel').classList.remove('open');
+}
+function saveSettings(){
+  settings={
+    name:document.getElementById('cfg_name').value.trim(),
+    addr:document.getElementById('cfg_addr').value.trim(),
+    account:document.getElementById('cfg_account').value.trim(),
+    wifi:document.getElementById('cfg_wifi').value.trim(),
+    wifipw:document.getElementById('cfg_wifipw').value.trim(),
+    door:document.getElementById('cfg_door').value.trim(),
+  };
+  localStorage.setItem(SK_SET,JSON.stringify(settings));
+  if(settings.name)document.getElementById('hdrTitle')?document.getElementById('hdrTitle').textContent=`🌲 ${settings.name} 문자`:null;
+  closeSettings();
+  toast('저장됐어요 ✓');
+  renderStage();
+}
+
+/* =============================================
+   TOAST / CONFIRM
+============================================= */
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2000);
+}
+function showConfirmModal(title,msg,onOk,onCancel,okTxt='확인',cancelTxt='취소'){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmMsg').textContent=msg;
+  document.getElementById('confirmOk').textContent=okTxt;
+  document.getElementById('confirmCancel').textContent=cancelTxt;
+  document.getElementById('confirmOk').onclick=()=>{document.getElementById('confirmModal').classList.remove('open');onOk&&onOk();};
+  document.getElementById('confirmCancel').onclick=()=>{document.getElementById('confirmModal').classList.remove('open');onCancel&&onCancel();};
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+/* =============================================
+   BOOT
+============================================= */
+loadAll();
+buildTabs();
+renderStage();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
