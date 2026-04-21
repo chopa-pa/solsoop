@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="예약문자">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>민박 예약 문자 보내기</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -320,6 +322,22 @@ main{padding:16px 14px 0;}
   opacity:0;transition:all .28s;z-index:999;
   white-space:nowrap;pointer-events:none;
 }
+/* ── PWA 설치 배너 ── */
+#installBanner{
+  position:fixed;bottom:0;left:0;right:0;z-index:990;
+  background:white;
+  border-top:1px solid #ffe0d8;
+  padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 14px);
+  display:none;align-items:center;gap:12px;
+  box-shadow:0 -4px 20px rgba(255,107,74,.15);
+}
+#installBanner.show{display:flex;}
+.install-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#FF6B4A,#FF8C6B);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.install-text{flex:1;}
+.install-text strong{display:block;font-size:14px;font-weight:700;color:#1c1c1e;}
+.install-text span{font-size:11px;color:#888;}
+.install-btn{padding:9px 16px;background:linear-gradient(135deg,#FF6B4A,#FF8C6B);color:white;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;}
+.install-close{padding:6px;font-size:18px;color:#aaa;cursor:pointer;flex-shrink:0;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ── MODAL ── */
@@ -506,6 +524,17 @@ main{padding:16px 14px 0;}
 
 <div id="_calModal"></div>
 <div class="toast" id="toast"></div>
+
+<!-- PWA 설치 배너 -->
+<div id="installBanner">
+  <div class="install-icon">🏡</div>
+  <div class="install-text">
+    <strong>홈 화면에 추가</strong>
+    <span>앱처럼 바로 실행할 수 있어요</span>
+  </div>
+  <button class="install-btn" id="installBtn">추가</button>
+  <span class="install-close" onclick="dismissInstall()">✕</span>
+</div>
 
 <script>
 const SK_SET='solsoop_set_v1';
@@ -879,6 +908,41 @@ renderStage();
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 }
+
+// PWA 설치 프롬프트
+let _installPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  _installPrompt=e;
+  if(!localStorage.getItem('pwa_dismissed')){
+    document.getElementById('installBanner').classList.add('show');
+  }
+});
+document.getElementById('installBtn').onclick=async()=>{
+  if(_installPrompt){
+    _installPrompt.prompt();
+    const r=await _installPrompt.userChoice;
+    _installPrompt=null;
+  } else {
+    // iOS 안내
+    showConfirmModal('홈 화면에 추가하기',
+      'Safari에서 하단 공유 버튼(□↑)을 탭한 후 "홈 화면에 추가"를 선택하세요.',
+      null,null,'확인','');
+  }
+  document.getElementById('installBanner').classList.remove('show');
+};
+function dismissInstall(){
+  document.getElementById('installBanner').classList.remove('show');
+  localStorage.setItem('pwa_dismissed','1');
+}
+// iOS: 앱 밖에서 실행 중이면 배너 표시
+window.addEventListener('load',()=>{
+  const isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone=window.navigator.standalone;
+  if(isIos&&!isStandalone&&!localStorage.getItem('pwa_dismissed')){
+    document.getElementById('installBanner').classList.add('show');
+  }
+});
 </script>
 </body>
 </html>
