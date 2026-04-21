@@ -1,6 +1,6 @@
 {
-  "name": "솔숲 문자",
-  "short_name": "솔숲",
+  "name": "민박 예약 문자",
+  "short_name": "민박문자",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
