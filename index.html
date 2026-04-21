@@ -207,14 +207,17 @@ main{padding:16px 14px 0;}
 .tpl-title-edit:focus{border-color:var(--accent);}
 
 /* ── VAR CHIPS ── */
-.var-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.var-chips-wrap{margin-top:10px;background:#fff7f5;border:1.5px solid #ffd5cc;border-radius:10px;padding:10px;}
+.var-chips-label{font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.5px;margin-bottom:7px;opacity:.8;}
+.var-chips{display:flex;flex-wrap:wrap;gap:5px;}
 .var-chip{
-  padding:5px 9px;
-  background:white;border:1.5px solid var(--border);
-  border-radius:8px;font-size:11px;color:var(--accent);
-  cursor:pointer;font-weight:700;
+  padding:5px 11px;
+  background:white;border:1.5px solid #ffb8a8;
+  border-radius:20px;font-size:11px;color:var(--accent);
+  cursor:pointer;font-weight:700;box-shadow:0 1px 3px rgba(255,107,74,.1);
+  transition:background .15s,transform .1s;
 }
-.var-chip:active{background:var(--bg);}
+.var-chip:active{background:#FF6B4A;color:white;transform:scale(.95);}
 
 /* ── ADD TEMPLATE ── */
 .btn-add-tpl{
@@ -586,7 +589,7 @@ function applyVars(raw){
   return raw.replace(/\{[^}]+\}/g,m=>map[m]!==undefined?map[m]:m);
 }
 function varChipsHtml(taId){
-  return`<div class="var-chips">${VAR_LIST.map(v=>`<button class="var-chip" onclick="insertVar('${v}','${taId}')">${v}</button>`).join('')}</div>`;
+  return`<div class="var-chips-wrap"><div class="var-chips-label">📌 변수 버튼 (탭하면 입력됩니다)</div><div class="var-chips">${VAR_LIST.map(v=>`<button class="var-chip" onclick="insertVar('${v}','${taId}')">${v}</button>`).join('')}</div></div>`;
 }
 function insertVar(v,taId){
   const ta=document.getElementById(taId);if(!ta)return;
