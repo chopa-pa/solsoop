@@ -207,6 +207,8 @@ main{padding:14px 14px 0;}
       <div class="set-row"><label>와이파이</label><input type="text" id="cfg_wifi" placeholder="예: solsoop_5G"></div>
       <div class="set-row"><label>와이파이 비번</label><input type="text" id="cfg_wifipw" placeholder="예: 12345678"></div>
       <div class="set-row"><label>도어락 비번</label><input type="text" id="cfg_door" placeholder="예: 1234#"></div>
+      <div class="set-row"><label>주중 요금</label><input type="text" id="cfg_pw" placeholder="예: 100,000원"></div>
+      <div class="set-row"><label>주말 요금</label><input type="text" id="cfg_pwe" placeholder="예: 150,000원"></div>
     </div>
     <button class="btn-primary" onclick="saveSettings()">💾 저장</button>
   </div>
@@ -237,7 +239,7 @@ main{padding:14px 14px 0;}
 const SK_SET='solsoop_set_v1';
 const SK_TPL='solsoop_tpl_v1';
 
-let settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:''};
+let settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:'',pw:'',pwe:''};
 let childCount=0;
 let curStage=0;
 let editState={};
@@ -277,7 +279,7 @@ const STAGES=[
   ]}
 ];
 
-const VAR_LIST=['{이름}','{입실}','{퇴실}','{인원}','{금액}','{연락처}','{아동}','{숙소}','{주소}','{계좌}','{와이파이}','{와이파이비번}','{비번}'];
+const VAR_LIST=['{이름}','{입실}','{퇴실}','{인원}','{금액}','{연락처}','{숙소}','{주소}','{계좌}','{와이파이}','{와이파이비번}','{비번}','{주중요금}','{주말요금}'];
 
 /* =============================================
    INIT
@@ -342,6 +344,8 @@ function applyVars(raw){
     '{와이파이}':settings.wifi||'{와이파이}',
     '{와이파이비번}':settings.wifipw||'{와이파이비번}',
     '{비번}':settings.door||'{비번}',
+    '{주중요금}':settings.pw||'{주중요금}',
+    '{주말요금}':settings.pwe||'{주말요금}',
   };
   return raw.replace(/\{[^}]+\}/g,m=>map[m]!==undefined?map[m]:m);
 }
@@ -587,6 +591,8 @@ function openSettings(){
   document.getElementById('cfg_wifi').value=settings.wifi||'';
   document.getElementById('cfg_wifipw').value=settings.wifipw||'';
   document.getElementById('cfg_door').value=settings.door||'';
+  document.getElementById('cfg_pw').value=settings.pw||'';
+  document.getElementById('cfg_pwe').value=settings.pwe||'';
   document.getElementById('setOverlay').classList.add('open');
   document.getElementById('setPanel').classList.add('open');
 }
@@ -602,6 +608,8 @@ function saveSettings(){
     wifi:document.getElementById('cfg_wifi').value.trim(),
     wifipw:document.getElementById('cfg_wifipw').value.trim(),
     door:document.getElementById('cfg_door').value.trim(),
+    pw:document.getElementById('cfg_pw').value.trim(),
+    pwe:document.getElementById('cfg_pwe').value.trim(),
   };
   localStorage.setItem(SK_SET,JSON.stringify(settings));
   if(settings.name)document.getElementById('hdrTitle')?document.getElementById('hdrTitle').textContent=`🌲 ${settings.name} 문자`:null;
