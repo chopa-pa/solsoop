@@ -393,7 +393,7 @@ main{padding:16px 14px 0;}
         <label>숙박 금액</label>
         <div class="fi-input">
           <span class="fi-icon">💰</span>
-          <input type="text" id="v_price" placeholder="예: 150,000원" oninput="renderStage()">
+          <input type="text" id="v_price" inputmode="numeric" placeholder="예: 150,000원" oninput="fmtPrice(this);renderStage()">
         </div>
       </div>
     </div>
@@ -628,6 +628,10 @@ function togCard(key){
   if(t)t.classList.toggle('open');
 }
 
+function fmtPrice(el){
+  const raw=el.value.replace(/[^\d]/g,'');
+  el.value=raw?Number(raw).toLocaleString('ko-KR')+'원':'';
+}
 function renderStage(){
   const s=STAGES[curStage];
   const tmpls=allTpls(s);
