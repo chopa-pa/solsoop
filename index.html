@@ -378,14 +378,14 @@ main{padding:16px 14px 0;}
         <label>손님 이름</label>
         <div class="fi-input">
           <span class="fi-icon">👤</span>
-          <input type="text" id="v_name" placeholder="홍길동" oninput="renderStage()" autocomplete="off">
+          <input type="text" id="v_name" placeholder="홍길동" oninput="renderStage()" onkeydown="if(event.key==='Enter')document.getElementById('v_phone').focus()" autocomplete="off">
         </div>
       </div>
       <div class="fi">
         <label>연락처</label>
         <div class="fi-input">
           <span class="fi-icon">📞</span>
-          <input type="tel" id="v_phone" placeholder="010-0000-0000" oninput="fmtPhone(this)" maxlength="13">
+          <input type="tel" id="v_phone" placeholder="010-0000-0000" oninput="fmtPhone(this)" maxlength="13" onkeydown="if(event.key==='Enter')document.getElementById('dateRangeBtn').click()">
         </div>
       </div>
       <div class="fi" style="grid-column:1/-1;">
@@ -411,7 +411,7 @@ main{padding:16px 14px 0;}
         <label>숙박 금액</label>
         <div class="fi-input">
           <span class="fi-icon">💰</span>
-          <input type="text" id="v_price" inputmode="numeric" placeholder="예: 150,000원" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this);renderStage()" oninput="renderStage()">
+          <input type="text" id="v_price" inputmode="numeric" placeholder="예: 150,000원" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this);renderStage()" oninput="renderStage()" onkeydown="if(event.key==='Enter')this.blur()">
         </div>
       </div>
     </div>
@@ -437,21 +437,21 @@ main{padding:16px 14px 0;}
         <span class="set-field-icon">🏡</span>
         <div class="set-field-body">
           <div class="set-field-label">숙소 이름</div>
-          <input type="text" id="cfg_name" placeholder="예: 솔숲 스테이">
+          <input type="text" id="cfg_name" placeholder="예: 솔숲 스테이" onkeydown="if(event.key==='Enter')document.getElementById('cfg_addr').focus()">
         </div>
       </div>
       <div class="set-field">
         <span class="set-field-icon">📍</span>
         <div class="set-field-body">
           <div class="set-field-label">주소</div>
-          <input type="text" id="cfg_addr" placeholder="예: 경남 산청군 ...">
+          <input type="text" id="cfg_addr" placeholder="예: 경남 산청군 ..." onkeydown="if(event.key==='Enter')document.getElementById('cfg_account').focus()">
         </div>
       </div>
       <div class="set-field">
         <span class="set-field-icon">🏦</span>
         <div class="set-field-body">
           <div class="set-field-label">계좌번호</div>
-          <input type="text" id="cfg_account" placeholder="예: 국민 123-456-789">
+          <input type="text" id="cfg_account" placeholder="예: 국민 123-456-789" onkeydown="if(event.key==='Enter')document.getElementById('cfg_wifi').focus()">
         </div>
       </div>
     </div>
@@ -462,21 +462,21 @@ main{padding:16px 14px 0;}
         <span class="set-field-icon">📶</span>
         <div class="set-field-body">
           <div class="set-field-label">와이파이 이름</div>
-          <input type="text" id="cfg_wifi" placeholder="예: solsoop_5G">
+          <input type="text" id="cfg_wifi" placeholder="예: solsoop_5G" onkeydown="if(event.key==='Enter')document.getElementById('cfg_wifipw').focus()">
         </div>
       </div>
       <div class="set-field">
         <span class="set-field-icon">🔑</span>
         <div class="set-field-body">
           <div class="set-field-label">와이파이 비밀번호</div>
-          <input type="text" id="cfg_wifipw" placeholder="예: 12345678">
+          <input type="text" id="cfg_wifipw" placeholder="예: 12345678" onkeydown="if(event.key==='Enter')document.getElementById('cfg_door').focus()">
         </div>
       </div>
       <div class="set-field">
         <span class="set-field-icon">🚪</span>
         <div class="set-field-body">
           <div class="set-field-label">도어락 비밀번호</div>
-          <input type="text" id="cfg_door" placeholder="예: 1234#" style="margin-bottom:8px;">
+          <input type="text" id="cfg_door" placeholder="예: 1234#" style="margin-bottom:8px;" onkeydown="if(event.key==='Enter')document.getElementById('cfg_pw').focus()">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#555;">
             <input type="checkbox" id="cfg_door_auto" onchange="toggleDoorAuto()" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
             손님 전화번호 뒷자리 자동 사용
@@ -491,14 +491,14 @@ main{padding:16px 14px 0;}
         <span class="set-field-icon">📅</span>
         <div class="set-field-body">
           <div class="set-field-label">주중 요금</div>
-          <input type="text" id="cfg_pw" inputmode="numeric" placeholder="예: 100,000원" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)">
+          <input type="text" id="cfg_pw" inputmode="numeric" placeholder="예: 100,000원" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)" onkeydown="if(event.key==='Enter')document.getElementById('cfg_pwe').focus()">
         </div>
       </div>
       <div class="set-field">
         <span class="set-field-icon">🌅</span>
         <div class="set-field-body">
           <div class="set-field-label">주말 요금</div>
-          <input type="text" id="cfg_pwe" inputmode="numeric" placeholder="예: 150,000원" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)">
+          <input type="text" id="cfg_pwe" inputmode="numeric" placeholder="예: 150,000원" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)" onkeydown="if(event.key==='Enter'){this.blur();saveSettings();}">
         </div>
       </div>
     </div>
@@ -679,7 +679,7 @@ function renderStage(){
     const rend=applyVars(raw);
     const isC=i>=orig;
     html+=`<div class="card">
-      <div class="card-h" onclick="togCard('${key}')">
+      <div class="card-h" onclick="togCard('${key}')" tabindex="0" onkeydown="if(event.key==='Enter')togCard('${key}')" role="button">
         <div class="card-badge">
           <span class="card-num">${i+1}</span>
           <span class="card-t">${esc(t.title)}</span>
@@ -916,6 +916,17 @@ function showConfirmModal(title,msg,onOk,onCancel,okTxt='확인',cancelTxt='취�
 loadAll();
 buildTabs();
 renderStage();
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('_calModal').innerHTML)document.getElementById('_calModal').innerHTML='';
+    else if(document.getElementById('setPanel').classList.contains('open'))closeSettings();
+    else if(document.getElementById('confirmModal').classList.contains('open'))document.getElementById('confirmModal').classList.remove('open');
+  }
+  if(e.key==='Enter'){
+    if(_cal.ci&&_cal.co&&document.getElementById('_calModal').innerHTML)_calConfirm();
+  }
+});
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
