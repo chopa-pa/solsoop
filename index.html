@@ -507,6 +507,13 @@ main{padding:16px 14px 0;}
       <button class="btn-primary" style="flex:1;" onclick="saveSettings()">💾 저장하기</button>
       <button onclick="confirmResetSettings()" style="padding:14px 16px;background:#fff0f0;border:1.5px solid #ffcccc;border-radius:var(--radius);color:#e55;font-weight:700;font-size:14px;cursor:pointer;">🗑 초기화</button>
     </div>
+
+    <div class="set-group-label" style="margin-top:20px;">📲 데이터 동기화</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="exportData()" style="flex:1;padding:13px;background:#f0f4ff;border:1.5px solid #c0d0ff;border-radius:var(--radius);color:#3355cc;font-weight:700;font-size:14px;cursor:pointer;">📤 내보내기</button>
+      <button onclick="document.getElementById('importFile').click()" style="flex:1;padding:13px;background:#f0fff4;border:1.5px solid #b0e8c0;border-radius:var(--radius);color:#226633;font-weight:700;font-size:14px;cursor:pointer;">📥 가져오기</button>
+    </div>
+    <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(this)">
   </div>
 </div>
 
@@ -898,6 +905,38 @@ function confirmResetSettings(){
   });
 }
 
+function exportData(){
+  const data={
+    settings:JSON.parse(localStorage.getItem(SK_SET)||'{}'),
+    tpl:JSON.parse(localStorage.getItem(SK_TPL)||'{}'),
+    exported:new Date().toISOString()
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`solsoop_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('내보내기 완료 📤');
+}
+function importData(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.settings)localStorage.setItem(SK_SET,JSON.stringify(data.settings));
+      if(data.tpl)localStorage.setItem(SK_TPL,JSON.stringify(data.tpl));
+      loadAll();
+      openSettings();
+      renderStage();
+      toast('가져오기 완료 ✅');
+    }catch(err){
+      toast('파일이 올바르지 않아요 ❌');
+    }
+    input.value='';
+  };
+  reader.readAsText(file);
+}
 function toast(msg){
   const el=document.getElementById('toast');
   el.textContent=msg;el.classList.add('show');
