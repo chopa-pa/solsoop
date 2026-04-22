@@ -345,7 +345,10 @@ main{padding:16px 14px 0;}
       <span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.7);letter-spacing:1.2px;text-transform:uppercase;margin-left:2px;">stay_msg_lite1</span>
       <span class="hdr-title" style="font-size:18px;font-weight:800;letter-spacing:-.3px;">🏡 숙소 예약 문자</span>
     </div>
-    <button class="hdr-set-btn" onclick="openSettings()">⚙️ 설정</button>
+    <div style="display:flex;gap:6px;">
+      <button class="hdr-set-btn" onclick="openPricePanel()">💰 요금</button>
+      <button class="hdr-set-btn" onclick="openSettings()">⚙️ 설정</button>
+    </div>
   </div>
 </header>
 
@@ -518,6 +521,41 @@ main{padding:16px 14px 0;}
 </div>
 
 
+<!-- 요금 조회 패널 -->
+<div class="set-overlay" id="priceOverlay" onclick="closePricePanel()"></div>
+<div class="set-panel" id="pricePanel">
+  <div class="set-handle"></div>
+  <div class="set-head">
+    <h2>💰 간단 요금 조회</h2>
+    <button class="set-close" onclick="closePricePanel()">✕</button>
+  </div>
+  <div class="set-body">
+    <div class="set-group-label">📅 날짜</div>
+    <div class="date-btn" id="priceDateBtn" onclick="openPriceCal()" style="margin-bottom:4px;">
+      <div class="drb-placeholder" id="priceDatePlaceholder">📅 날짜를 선택하세요</div>
+    </div>
+
+    <div class="set-group-label" style="margin-top:14px;">👥 인원</div>
+    <div class="fi-input" style="margin-bottom:4px;">
+      <span class="fi-icon">👥</span>
+      <select id="p_guests" onchange="calcPricePanel()">
+        <option value="">선택 안 함</option>
+        <option>1명</option><option>2명</option><option>3명</option><option>4명</option>
+        <option>5명</option><option>6명</option><option>7명</option><option>8명</option>
+      </select>
+    </div>
+
+    <div id="priceBreakdown" style="display:none;margin-top:16px;"></div>
+
+    <button id="priceUseBtn" onclick="usePriceResult()" class="btn-primary" style="display:none;margin-top:8px;">
+      ✅ 이 금액으로 손님 정보에 입력
+    </button>
+
+    <div style="height:8px;"></div>
+  </div>
+</div>
+
+<div id="_priceCalModal"></div>
 <div id="_calModal"></div>
 <div class="toast" id="toast"></div>
 
@@ -932,13 +970,166 @@ function showConfirmModal(title,msg,onOk,onCancel,okTxt='확인',cancelTxt='취�
   document.getElementById('confirmModal').classList.add('open');
 }
 
+// ── 요금 조회 패널 ────────────────────────────────────────────────────────
+let _pcal={ci:null,co:null,step:'ci',y:0,m:0};
+
+function openPricePanel(){
+  const now=new Date();
+  _pcal={ci:null,co:null,step:'ci',y:now.getFullYear(),m:now.getMonth()};
+  document.getElementById('priceDatePlaceholder').textContent='📅 날짜를 선택하세요';
+  document.getElementById('priceDateBtn').innerHTML='<div class="drb-placeholder" id="priceDatePlaceholder">📅 날짜를 선택하세요</div>';
+  document.getElementById('p_guests').value='';
+  document.getElementById('priceBreakdown').style.display='none';
+  document.getElementById('priceUseBtn').style.display='none';
+  document.getElementById('priceOverlay').classList.add('open');
+  document.getElementById('pricePanel').classList.add('open');
+}
+function closePricePanel(){
+  document.getElementById('priceOverlay').classList.remove('open');
+  document.getElementById('pricePanel').classList.remove('open');
+  document.getElementById('_priceCalModal').innerHTML='';
+}
+
+function openPriceCal(){
+  _pcal.step=(_pcal.ci&&!_pcal.co)?'co':'ci';
+  _renderPCal();
+}
+function _renderPCal(){
+  const y=_pcal.y,m=_pcal.m;
+  const today=new Date().toISOString().slice(0,10);
+  const first=new Date(y,m,1).getDay();
+  const days=new Date(y,m+1,0).getDate();
+  const DOW=['일','월','화','수','목','금','토'];
+  let g=DOW.map(d=>`<div style="text-align:center;font-size:11px;font-weight:600;color:var(--ink-light);padding:4px 0;">${d}</div>`).join('');
+  for(let i=0;i<first;i++)g+=`<div></div>`;
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isCi=ds===_pcal.ci,isCo=ds===_pcal.co;
+    const inRange=_pcal.ci&&_pcal.co&&ds>_pcal.ci&&ds<_pcal.co;
+    const isPast=ds<today;
+    let bg=isCi||isCo?'var(--accent)':inRange?'rgba(255,107,74,0.12)':'transparent';
+    let color=isCi||isCo?'white':isPast?'#C7C7CC':'var(--ink)';
+    const dow=(first+d-1)%7;
+    if(!isCi&&!isCo&&!isPast){if(dow===0)color='#EF4444';else if(dow===6)color='#007AFF';}
+    g+=`<div onclick="${isPast?'':'_pcalPick(\''+ds+'\')'}" style="text-align:center;padding:8px 2px;border-radius:50%;background:${bg};color:${color};font-size:14px;font-weight:${isCi||isCo?700:400};cursor:${isPast?'default':'pointer'};">${d}</div>`;
+  }
+  const hint=_pcal.step==='ci'?'입실 날짜를 선택하세요':'퇴실 날짜를 선택하세요';
+  const ciTxt=_pcal.ci?_pcal.ci.slice(5).replace('-','/')+'(입실)':'미선택';
+  const coTxt=_pcal.co?_pcal.co.slice(5).replace('-','/')+'(퇴실)':'미선택';
+  document.getElementById('_priceCalModal').innerHTML=`
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:600;display:flex;align-items:flex-end;">
+    <div style="background:white;border-radius:24px 24px 0 0;width:100%;padding:20px 16px 36px;max-height:85vh;overflow-y:auto;">
+      <div style="width:36px;height:4px;background:#D1D1D6;border-radius:2px;margin:0 auto 16px;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <button onclick="_pcalNav(-1)" style="background:none;border:none;font-size:24px;cursor:pointer;padding:4px 12px;color:var(--ink);">‹</button>
+        <span style="font-weight:700;font-size:16px;">${y}년 ${_MN[m]}</span>
+        <button onclick="_pcalNav(1)" style="background:none;border:none;font-size:24px;cursor:pointer;padding:4px 12px;color:var(--ink);">›</button>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--accent);font-weight:700;margin-bottom:14px;">${hint}</p>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:14px;">${g}</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
+        <span style="font-size:13px;background:var(--bg);padding:7px 14px;border-radius:20px;">${ciTxt}</span>
+        <span style="font-size:14px;color:var(--ink-light);align-self:center;">→</span>
+        <span style="font-size:13px;background:var(--bg);padding:7px 14px;border-radius:20px;">${coTxt}</span>
+      </div>
+      <div style="display:flex;gap:10px;">
+        ${_pcal.ci&&_pcal.co?`<button onclick="_pcalConfirm()" style="flex:1;padding:14px;background:linear-gradient(135deg,#FF6B4A,#FF8C6B);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">확인</button>`:''}
+        <button onclick="document.getElementById('_priceCalModal').innerHTML=''" style="flex:1;padding:14px;background:var(--bg);color:var(--ink-light);border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">취소</button>
+      </div>
+    </div></div>`;
+}
+function _pcalPick(ds){
+  if(_pcal.step==='ci'){_pcal.ci=ds;_pcal.co=null;_pcal.step='co';}
+  else{if(ds<=_pcal.ci){_pcal.ci=ds;_pcal.co=null;_pcal.step='co';}else{_pcal.co=ds;}}
+  _renderPCal();
+}
+function _pcalNav(d){_pcal.m+=d;if(_pcal.m<0){_pcal.m=11;_pcal.y--;}else if(_pcal.m>11){_pcal.m=0;_pcal.y++;}_renderPCal();}
+function _pcalConfirm(){
+  document.getElementById('_priceCalModal').innerHTML='';
+  _updatePriceDateDisplay();
+  calcPricePanel();
+}
+
+function _updatePriceDateDisplay(){
+  const ci=_pcal.ci,co=_pcal.co;
+  const DOW=['일','월','화','수','목','금','토'];
+  function fmt(ds){const d=new Date(ds+'T00:00:00');return`${d.getMonth()+1}월 ${d.getDate()}일(${DOW[d.getDay()]})`;}
+  const btn=document.getElementById('priceDateBtn');
+  if(ci&&co){
+    const n=Math.round((new Date(co)-new Date(ci))/86400000);
+    btn.innerHTML=`<div class="drb-side ci"><span class="drb-label">📅 입실</span><span class="drb-date">${fmt(ci)}</span></div><div class="drb-mid"><span class="drb-arrow">→</span><span class="drb-nights">${n}박</span></div><div class="drb-side"><span class="drb-label">🚪 퇴실</span><span class="drb-date">${fmt(co)}</span></div>`;
+  } else if(ci){
+    btn.innerHTML=`<div class="drb-side"><span class="drb-label">📅 입실</span><span class="drb-date">${fmt(ci)}</span></div><div class="drb-mid"><span class="drb-arrow">→</span></div><div class="drb-side"><span class="drb-label" style="color:#C7C7CC;">🚪 퇴실</span><span class="drb-date" style="color:#C7C7CC;font-size:13px;">미선택</span></div>`;
+  } else {
+    btn.innerHTML=`<div class="drb-placeholder">📅 날짜를 선택하세요</div>`;
+  }
+}
+
+function calcPricePanel(){
+  const ci=_pcal.ci,co=_pcal.co;
+  if(!ci||!co) return;
+  const pw=parseNum(settings.pw);
+  const pwe=parseNum(settings.pwe)||pw;
+  if(!pw){
+    document.getElementById('priceBreakdown').style.display='';
+    document.getElementById('priceBreakdown').innerHTML=`<div style="background:#FFF3E0;border-radius:12px;padding:14px;font-size:13px;color:#C05A1F;">⚠️ 설정에서 주중/주말 요금을 먼저 입력하세요.</div>`;
+    document.getElementById('priceUseBtn').style.display='none';
+    return;
+  }
+  let wd=0,we=0;
+  const cur=new Date(ci+'T00:00:00');
+  const end=new Date(co+'T00:00:00');
+  while(cur<end){
+    const dow=cur.getDay();
+    if(dow===5||dow===6) we++; else wd++;
+    cur.setDate(cur.getDate()+1);
+  }
+  const nights=wd+we;
+  const total=wd*pw+we*pwe;
+  const ROW='display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px dashed #C8E6C4;font-size:13px;';
+  const BADGE=(txt,c)=>`<span style="background:${c}20;color:${c};font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;">${txt}</span>`;
+  let rows='';
+  if(wd>0) rows+=`<div style="${ROW}">${BADGE('주중','#2E6DA4')}<span style="color:var(--ink-light);">${wd}박 × ${pw.toLocaleString()}원</span><span style="font-weight:700;color:#2E6DA4;">${(wd*pw).toLocaleString()}원</span></div>`;
+  if(we>0) rows+=`<div style="${ROW}">${BADGE('주말','#C05A1F')}<span style="color:var(--ink-light);">${we}박 × ${pwe.toLocaleString()}원</span><span style="font-weight:700;color:#C05A1F;">${(we*pwe).toLocaleString()}원</span></div>`;
+  const el=document.getElementById('priceBreakdown');
+  el.innerHTML=`<div style="background:#F0FFF4;border:1.5px solid #A8D8B0;border-radius:14px;padding:14px;">
+    ${rows}
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;margin-top:4px;border-top:2px solid #A8D8B0;">
+      <span style="font-size:15px;font-weight:700;">합계 <span style="font-weight:500;color:var(--ink-light);font-size:13px;">(${nights}박)</span></span>
+      <span style="font-size:20px;font-weight:800;color:var(--accent);">${total.toLocaleString()}원</span>
+    </div>
+  </div>`;
+  el.style.display='';
+  document.getElementById('priceUseBtn').style.display='';
+  document.getElementById('priceUseBtn')._total=total;
+  document.getElementById('priceUseBtn')._nights=nights;
+}
+
+function usePriceResult(){
+  const btn=document.getElementById('priceUseBtn');
+  if(!_pcal.ci||!_pcal.co) return;
+  document.getElementById('v_checkin').value=_pcal.ci;
+  document.getElementById('v_checkout').value=_pcal.co;
+  _cal.ci=_pcal.ci; _cal.co=_pcal.co;
+  _updateDateDisplay();
+  if(btn._total){
+    const el=document.getElementById('v_price');
+    el.value=btn._total.toLocaleString()+'원';
+  }
+  renderStage();
+  closePricePanel();
+  toast('날짜와 금액이 입력됐어요 💰');
+}
+
 loadAll();
 buildTabs();
 renderStage();
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
-    if(document.getElementById('_calModal').innerHTML)document.getElementById('_calModal').innerHTML='';
+    if(document.getElementById('_priceCalModal').innerHTML)document.getElementById('_priceCalModal').innerHTML='';
+    else if(document.getElementById('_calModal').innerHTML)document.getElementById('_calModal').innerHTML='';
+    else if(document.getElementById('pricePanel').classList.contains('open'))closePricePanel();
     else if(document.getElementById('setPanel').classList.contains('open'))closeSettings();
     else if(document.getElementById('confirmModal').classList.contains('open'))document.getElementById('confirmModal').classList.remove('open');
   }
