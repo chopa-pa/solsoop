@@ -1,6 +1,6 @@
 {
-  "name": "숙소 예약 문자",
-  "short_name": "예약문자",
+  "name": "stay_msg_lite1",
+  "short_name": "stay_msg_lite1",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#FF6B4A",

@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="예약문자">
+<meta name="apple-mobile-web-app-title" content="stay_msg_lite1">
 <link rel="apple-touch-icon" href="./icon-192.png">
-<title>민박 예약 문자 보내기</title>
+<title>stay_msg_lite1</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -342,7 +342,7 @@ main{padding:16px 14px 0;}
 <header>
   <div class="hdr-row">
     <div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;line-height:1.2;">
-      <span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.7);letter-spacing:1.2px;text-transform:uppercase;margin-left:2px;">Stay_Msg_V1</span>
+      <span style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.7);letter-spacing:1.2px;text-transform:uppercase;margin-left:2px;">stay_msg_lite1</span>
       <span class="hdr-title" style="font-size:18px;font-weight:800;letter-spacing:-.3px;">🏡 숙소 예약 문자</span>
     </div>
     <button class="hdr-set-btn" onclick="openSettings()">⚙️ 설정</button>
@@ -523,8 +523,8 @@ main{padding:16px 14px 0;}
 
 
 <script>
-const SK_SET='solsoop_set_v1';
-const SK_TPL='solsoop_tpl_v1';
+const SK_SET='stay_msg_lite1_set_v1';
+const SK_TPL='stay_msg_lite1_tpl_v1';
 
 let settings={name:'',addr:'',account:'',wifi:'',wifipw:'',door:'',doorAuto:false,pw:'',pwe:''};
 let childCount=0;
@@ -894,7 +894,7 @@ function exportData(){
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
-  a.download=`solsoop_${new Date().toISOString().slice(0,10)}.json`;
+  a.download=`stay_msg_lite1_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   toast('내보내기 완료 📤');
 }
