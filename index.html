@@ -870,7 +870,7 @@ input,select,textarea{font-family:inherit;}
       <div class="sidebar-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="sidebar-logo">SM</div>
         <div class="sidebar-brand-text">
-          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.16</span></div>
+          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.17</span></div>
           <div class="sidebar-brand-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -909,7 +909,7 @@ input,select,textarea{font-family:inherit;}
       <div class="mheader-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="mheader-logo">SM</div>
         <div>
-          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.16</span></div>
+          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.17</span></div>
           <div class="mheader-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -923,24 +923,61 @@ input,select,textarea{font-family:inherit;}
     <section class="page active" id="tab-home">
 
       <div class="hero">
-        <!-- Soft abstract background blobs -->
+        <!-- Soft abstract background + mountain silhouette -->
         <svg class="hero-bg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <radialGradient id="hb1" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
               <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
             </radialGradient>
             <radialGradient id="hb2" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
               <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
             </radialGradient>
             <pattern id="hdot" width="14" height="14" patternUnits="userSpaceOnUse">
-              <circle cx="2" cy="2" r="0.9" fill="white" opacity="0.12"/>
+              <circle cx="2" cy="2" r="0.9" fill="white" opacity="0.10"/>
             </pattern>
           </defs>
           <rect width="600" height="200" fill="url(#hdot)"/>
-          <circle cx="120" cy="60" r="110" fill="url(#hb1)"/>
+          <circle cx="110" cy="50" r="110" fill="url(#hb1)"/>
           <circle cx="470" cy="150" r="130" fill="url(#hb2)"/>
+
+          <!-- Back mountain silhouette (lightest) -->
+          <path d="M 0 200 L 0 118 L 70 78 L 140 105 L 210 70 L 300 100 L 380 75 L 470 110 L 560 85 L 600 100 L 600 200 Z"
+                fill="#052e2a" opacity="0.22"/>
+
+          <!-- Middle mountain -->
+          <path d="M 0 200 L 0 145 L 80 118 L 160 140 L 250 115 L 340 148 L 430 120 L 520 150 L 600 135 L 600 200 Z"
+                fill="#052e2a" opacity="0.35"/>
+
+          <!-- Pine tree silhouettes on middle ridge -->
+          <g fill="#052e2a" opacity="0.55">
+            <polygon points="40,145 32,165 48,165"/>
+            <polygon points="40,135 34,150 46,150"/>
+            <polygon points="78,155 70,175 86,175"/>
+            <polygon points="265,140 258,160 272,160"/>
+            <polygon points="265,130 260,145 270,145"/>
+            <polygon points="172,162 164,180 180,180"/>
+          </g>
+
+          <!-- Cabin silhouette -->
+          <g fill="#052e2a" opacity="0.65">
+            <polygon points="110,145 126,128 142,145"/>
+            <rect x="114" y="145" width="24" height="20"/>
+            <rect x="134" y="132" width="4" height="10"/>
+          </g>
+
+          <!-- Front hill -->
+          <path d="M 0 200 L 0 172 L 90 160 L 190 175 L 300 165 L 420 178 L 540 168 L 600 176 L 600 200 Z"
+                fill="#04231f" opacity="0.45"/>
+
+          <!-- Front pines -->
+          <g fill="#04231f" opacity="0.6">
+            <polygon points="230,168 222,185 238,185"/>
+            <polygon points="230,160 224,172 236,172"/>
+            <polygon points="475,172 467,188 483,188"/>
+            <polygon points="560,164 552,182 568,182"/>
+          </g>
         </svg>
 
         <!-- Clean message-bubbles composition -->
@@ -1435,7 +1472,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.5.16';
+const APP_VERSION='v1.5.17';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
