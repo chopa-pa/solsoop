@@ -217,6 +217,16 @@ input,select,textarea{font-family:inherit;}
   display:flex;align-items:center;justify-content:center;
   font-size:13px;
 }
+
+/* ─────── SF-style SVG icons ─────── */
+.i{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;stroke:currentColor;fill:none;flex-shrink:0;overflow:visible;}
+.sidebar-link-icon .i,.bnav-ico .i{width:16px;height:16px;}
+.stat-ico .i{width:19px;height:19px;}
+.card-head-title .ico .i,.guide-group-title .ico .i{width:15px;height:15px;}
+.mheader-action .i{width:18px;height:18px;}
+.btn .i{width:16px;height:16px;vertical-align:-0.2em;margin-right:4px;}
+.page-title .i{width:22px;height:22px;color:var(--primary);margin-right:6px;vertical-align:-0.15em;}
+.hero-eyebrow .i{width:13px;height:13px;vertical-align:-0.15em;margin-right:4px;}
 .card-head-sub{font-size:12px;color:var(--muted-fg);margin-top:4px;margin-left:34px;}
 .card-body{padding:18px 20px;}
 
@@ -696,6 +706,32 @@ input,select,textarea{font-family:inherit;}
 </head>
 <body>
 
+<!-- ═══════ SVG Icon Sprite (SF Symbols-style, 24x24) ═══════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 L12 3.5 L21 11 M5 10 V19.5 A1 1 0 0 0 6 20.5 H9.5 V14 H14.5 V20.5 H18 A1 1 0 0 0 19 19.5 V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20 V15.5 L15.5 4 L20 8.5 L8.5 20 Z M13 6.5 L17.5 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24"><path d="M9 4 H15 A1 1 0 0 1 16 5 V6 H18 A1 1 0 0 1 19 7 V20 A1 1 0 0 1 18 21 H6 A1 1 0 0 1 5 20 V7 A1 1 0 0 1 6 6 H8 V5 A1 1 0 0 1 9 4 Z M8 11 H16 M8 15 H16 M8 18 H13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-house" viewBox="0 0 24 24"><path d="M3 10.5 L12 3 L21 10.5 V20 A1 1 0 0 1 20 21 H4 A1 1 0 0 1 3 20 Z M10 21 V14 H14 V21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4 H10 A2 2 0 0 1 12 6 V20 A2 2 0 0 0 10 18 H4 Z M20 4 H14 A2 2 0 0 0 12 6 V20 A2 2 0 0 1 14 18 H20 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M4 12 A8 8 0 0 1 17 5.5 M20 4 V8 H16 M20 12 A8 8 0 0 1 7 18.5 M4 20 V16 H8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10 H20.5 M8 3 V7 M16 3 V7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-login" viewBox="0 0 24 24"><path d="M11 4 H18 A1 1 0 0 1 19 5 V19 A1 1 0 0 1 18 20 H11 M14 12 H4 M8 8 L4 12 L8 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M13 4 H6 A1 1 0 0 0 5 5 V19 A1 1 0 0 0 6 20 H13 M10 12 H20 M16 8 L20 12 L16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20 V11 M10 20 V6 M16 20 V14 M3 20 H21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3 H15 L14 9 L17.5 12 L13 13 L12 21 L11 13 L6.5 12 L10 9 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3 H14 L19 8 V20 A1 1 0 0 1 18 21 H6 A1 1 0 0 1 5 20 V4 A1 1 0 0 1 6 3 Z M14 3 V8 H19 M9 13 H15 M9 17 H13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 20 C4 16 8 14 12 14 C16 14 20 16 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-iphone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 5.5 H14 M11 18.5 H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="i-save" viewBox="0 0 24 24"><path d="M4 13 V18 A2 2 0 0 0 6 20 H18 A2 2 0 0 0 20 18 V13 M12 4 V15 M8 11 L12 15 L16 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7 H20 M10 11 V17 M14 11 V17 M6 7 L7 20 A1 1 0 0 0 8 21 H16 A1 1 0 0 0 17 20 L18 7 M9 7 V4 A1 1 0 0 1 10 3 H14 A1 1 0 0 1 15 4 V7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5 V5 M12 19 V21.5 M4.5 4.5 L6.5 6.5 M17.5 17.5 L19.5 19.5 M2.5 12 H5 M19 12 H21.5 M4.5 19.5 L6.5 17.5 M17.5 6.5 L19.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3 L13.5 9 L19 11 L13.5 13 L12 19 L10.5 13 L5 11 L10.5 9 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M19 4 L19.7 6.2 L22 7 L19.7 7.8 L19 10 L18.3 7.8 L16 7 L18.3 6.2 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M21 12 A9 9 0 1 1 12 3 A9 9 0 0 1 21 12 A9 9 0 0 1 12 21 L4.5 21 L6 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 11 V7 A4 4 0 0 1 16 7 V11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="i-dollar" viewBox="0 0 24 24"><path d="M16.5 7 H9 A2 2 0 0 0 9 11 H15 A2 2 0 0 1 15 15 H7.5 M12 4 V20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 11 V6 A1.5 1.5 0 0 1 12 6 V13 M12 13 V5 A1.5 1.5 0 0 1 15 5 V13 M15 13 V7 A1.5 1.5 0 0 1 18 7 V15 A6 6 0 0 1 12 21 L11 21 C9 21 7 19.5 6 17.5 L3.5 13 A1.5 1.5 0 0 1 6 11.5 L9 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs></svg>
+
 <div class="app">
 
   <!-- ═══════ SIDEBAR (desktop) ═══════ -->
@@ -704,26 +740,26 @@ input,select,textarea{font-family:inherit;}
       <div class="sidebar-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="sidebar-logo">S</div>
         <div class="sidebar-brand-text">
-          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.5</span></div>
+          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.6</span></div>
           <div class="sidebar-brand-sub">숙소 예약 문자</div>
         </div>
       </div>
     </div>
     <nav class="sidebar-nav">
       <button class="sidebar-link active" data-tab="home" onclick="switchTab('home')">
-        <span class="sidebar-link-icon">🏠</span>대시보드
+        <span class="sidebar-link-icon"><svg class="i"><use href="#i-home"/></svg></span>대시보드
       </button>
       <button class="sidebar-link" data-tab="compose" onclick="switchTab('compose')">
-        <span class="sidebar-link-icon">✏️</span>문자 작성
+        <span class="sidebar-link-icon"><svg class="i"><use href="#i-pencil"/></svg></span>문자 작성
       </button>
       <button class="sidebar-link" data-tab="reserv" onclick="switchTab('reserv')">
-        <span class="sidebar-link-icon">📋</span>예약 관리
+        <span class="sidebar-link-icon"><svg class="i"><use href="#i-clipboard"/></svg></span>예약 관리
       </button>
       <button class="sidebar-link" data-tab="prop" onclick="switchTab('prop')">
-        <span class="sidebar-link-icon">🏡</span>숙소 프로필
+        <span class="sidebar-link-icon"><svg class="i"><use href="#i-house"/></svg></span>숙소 프로필
       </button>
       <button class="sidebar-link" data-tab="guide" onclick="switchTab('guide')">
-        <span class="sidebar-link-icon">📖</span>도움말
+        <span class="sidebar-link-icon"><svg class="i"><use href="#i-book"/></svg></span>도움말
       </button>
     </nav>
     <div class="sidebar-foot">
@@ -740,11 +776,11 @@ input,select,textarea{font-family:inherit;}
       <div class="mheader-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="mheader-logo">S</div>
         <div>
-          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.5</span></div>
+          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.6</span></div>
           <div class="mheader-sub">숙소 예약 문자</div>
         </div>
       </div>
-      <button class="mheader-action" onclick="location.reload()" title="새로고침">🔄</button>
+      <button class="mheader-action" onclick="location.reload()" title="새로고침"><svg class="i"><use href="#i-refresh"/></svg></button>
     </header>
 
     <!-- ─── HOME ─── -->
@@ -874,7 +910,7 @@ input,select,textarea{font-family:inherit;}
         </div>
 
         <div class="hero-content">
-          <span class="hero-eyebrow">👋 환영합니다</span>
+          <span class="hero-eyebrow"><svg class="i"><use href="#i-hand"/></svg>환영합니다</span>
           <h1 class="hero-title">Stay_Msg<br>예약 문자를 빠르게 💬</h1>
           <p class="hero-sub">템플릿을 선택하고 게스트 정보만 입력하면, 정성 담긴 문자가 자동으로 완성돼요.</p>
         </div>
@@ -882,22 +918,22 @@ input,select,textarea{font-family:inherit;}
 
       <div class="stats-grid">
         <div class="stat">
-          <div class="stat-ico">📅</div>
+          <div class="stat-ico"><svg class="i"><use href="#i-login"/></svg></div>
           <div class="stat-num" id="dashCiNum">0</div>
           <div class="stat-lbl">오늘 체크인</div>
         </div>
         <div class="stat">
-          <div class="stat-ico warn">🚪</div>
+          <div class="stat-ico warn"><svg class="i"><use href="#i-logout"/></svg></div>
           <div class="stat-num" id="dashCoNum">0</div>
           <div class="stat-lbl">오늘 체크아웃</div>
         </div>
         <div class="stat">
-          <div class="stat-ico blue">📆</div>
+          <div class="stat-ico blue"><svg class="i"><use href="#i-calendar"/></svg></div>
           <div class="stat-num" id="dashUpNum">0</div>
           <div class="stat-lbl">7일 이내 예약</div>
         </div>
         <div class="stat">
-          <div class="stat-ico purple">📊</div>
+          <div class="stat-ico purple"><svg class="i"><use href="#i-chart"/></svg></div>
           <div class="stat-num" id="dashTotalNum">0</div>
           <div class="stat-lbl">저장된 예약</div>
         </div>
@@ -905,29 +941,29 @@ input,select,textarea{font-family:inherit;}
 
       <div class="card">
         <div class="card-head">
-          <div class="card-head-title"><span class="ico">📌</span>오늘 일정 <span id="dashDate" style="margin-left:auto;font-weight:500;color:var(--muted-fg);font-size:12px;"></span></div>
+          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-pin"/></svg></span>오늘 일정 <span id="dashDate" style="margin-left:auto;font-weight:500;color:var(--muted-fg);font-size:12px;"></span></div>
         </div>
         <div class="res-list" id="dashList"></div>
       </div>
 
       <div class="card">
         <div class="card-head">
-          <div class="card-head-title"><span class="ico">📆</span>다가오는 예약 (7일 이내)</div>
+          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-calendar"/></svg></span>다가오는 예약 (7일 이내)</div>
         </div>
         <div class="res-list" id="dashUpcoming"></div>
       </div>
 
       <div class="section-label">빠른 실행</div>
       <div class="btn-row-2">
-        <button class="btn btn-primary" onclick="switchTab('compose')">✏️ 새 문자 작성</button>
-        <button class="btn btn-outline" onclick="switchTab('reserv')">📋 예약 관리</button>
+        <button class="btn btn-primary" onclick="switchTab('compose')"><svg class="i"><use href="#i-pencil"/></svg>새 문자 작성</button>
+        <button class="btn btn-outline" onclick="switchTab('reserv')"><svg class="i"><use href="#i-clipboard"/></svg>예약 관리</button>
       </div>
     </section>
 
     <!-- ─── COMPOSE ─── -->
     <section class="page" id="tab-compose">
       <div class="page-head">
-        <h1 class="page-title">✏️ 문자 작성</h1>
+        <h1 class="page-title"><svg class="i"><use href="#i-pencil"/></svg>문자 작성</h1>
         <p class="page-sub">게스트 정보를 입력하면 템플릿에 자동으로 채워집니다</p>
       </div>
 
@@ -938,7 +974,7 @@ input,select,textarea{font-family:inherit;}
 
           <div class="card">
             <div class="card-head">
-              <div class="card-head-title"><span class="ico">📝</span>템플릿 선택</div>
+              <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-doc"/></svg></span>템플릿 선택</div>
             </div>
             <div class="card-body" style="padding-top:14px;">
               <div class="tpl-select-wrap">
@@ -949,7 +985,7 @@ input,select,textarea{font-family:inherit;}
 
           <div class="card">
             <div class="card-head">
-              <div class="card-head-title"><span class="ico">👤</span>게스트 정보</div>
+              <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-user"/></svg></span>게스트 정보</div>
             </div>
             <div class="card-body">
               <div class="form-grid">
@@ -967,7 +1003,7 @@ input,select,textarea{font-family:inherit;}
 
           <div class="card">
             <div class="card-head">
-              <div class="card-head-title"><span class="ico">📅</span>체크인 / 체크아웃</div>
+              <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-calendar"/></svg></span>체크인 / 체크아웃</div>
             </div>
             <div class="card-body">
               <div class="fi">
@@ -1014,28 +1050,28 @@ input,select,textarea{font-family:inherit;}
           <div id="editArea" style="display:none;margin-top:12px;">
             <div class="card">
               <div class="card-head">
-                <div class="card-head-title"><span class="ico">✏️</span>템플릿 편집</div>
+                <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-pencil"/></svg></span>템플릿 편집</div>
               </div>
               <textarea class="edit-ta" id="editBody"></textarea>
               <div id="varChipArea"></div>
               <div style="padding:12px 16px;display:flex;gap:8px;border-top:1px solid var(--border);">
                 <button class="btn btn-outline" style="flex:1;" onclick="cancelEditTpl()">취소</button>
-                <button class="btn btn-primary" style="flex:1;" onclick="saveEditTpl()">💾 저장</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="saveEditTpl()"><svg class="i"><use href="#i-save"/></svg>저장</button>
               </div>
             </div>
           </div>
 
           <div class="action-bar">
-            <button class="btn btn-outline" onclick="clearForm()">🗑 초기화</button>
-            <button class="btn btn-outline" onclick="saveReservation()">💾 예약 저장</button>
+            <button class="btn btn-outline" onclick="clearForm()"><svg class="i"><use href="#i-trash"/></svg>초기화</button>
+            <button class="btn btn-outline" onclick="saveReservation()"><svg class="i"><use href="#i-save"/></svg>예약 저장</button>
             <button class="btn btn-outline" onclick="copyMessage()">📋 텍스트 복사</button>
-            <button class="btn btn-primary" onclick="openSmsApp()">📱 문자 앱 열기</button>
+            <button class="btn btn-primary" onclick="openSmsApp()"><svg class="i"><use href="#i-iphone"/></svg>문자 앱 열기</button>
           </div>
 
           <div style="margin-top:10px;display:flex;gap:8px;">
-            <button class="btn btn-outline btn-sm" style="flex:1;" onclick="startEditTpl()">✏️ 템플릿 편집</button>
+            <button class="btn btn-outline btn-sm" style="flex:1;" onclick="startEditTpl()"><svg class="i"><use href="#i-pencil"/></svg>템플릿 편집</button>
             <button class="btn btn-outline btn-sm" style="flex:1;" onclick="addNewTemplate()">＋ 새 템플릿</button>
-            <button class="btn btn-destructive btn-sm" id="delTplBtn" onclick="deleteCurTpl()" style="display:none;">🗑 삭제</button>
+            <button class="btn btn-destructive btn-sm" id="delTplBtn" onclick="deleteCurTpl()" style="display:none;"><svg class="i"><use href="#i-trash"/></svg>삭제</button>
           </div>
         </div>
       </div>
@@ -1053,13 +1089,13 @@ input,select,textarea{font-family:inherit;}
     <!-- ─── PROP (settings) ─── -->
     <section class="page" id="tab-prop">
       <div class="page-head">
-        <h1 class="page-title">🏡 숙소 프로필</h1>
+        <h1 class="page-title"><svg class="i"><use href="#i-house"/></svg>숙소 프로필</h1>
         <p class="page-sub">숙소 정보·입실 정보·요금을 설정하면 문자에 자동으로 반영됩니다</p>
       </div>
 
       <div class="card">
         <div class="card-head">
-          <div class="card-head-title"><span class="ico">🏡</span>숙소 정보</div>
+          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-house"/></svg></span>숙소 정보</div>
         </div>
         <div class="card-body">
           <div class="fi" style="margin-bottom:12px;">
@@ -1079,7 +1115,7 @@ input,select,textarea{font-family:inherit;}
 
       <div class="card">
         <div class="card-head">
-          <div class="card-head-title"><span class="ico">🔐</span>입실 정보</div>
+          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-lock"/></svg></span>입실 정보</div>
         </div>
         <div class="card-body">
           <div class="form-grid">
@@ -1105,7 +1141,7 @@ input,select,textarea{font-family:inherit;}
 
       <div class="card">
         <div class="card-head">
-          <div class="card-head-title"><span class="ico">💰</span>요금</div>
+          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-dollar"/></svg></span>요금</div>
         </div>
         <div class="card-body">
           <div class="form-grid">
@@ -1122,8 +1158,8 @@ input,select,textarea{font-family:inherit;}
       </div>
 
       <div class="btn-row-2" style="margin-top:14px;">
-        <button class="btn btn-destructive" onclick="confirmResetSettings()">🗑 초기화</button>
-        <button class="btn btn-primary" onclick="saveSettings()">💾 저장</button>
+        <button class="btn btn-destructive" onclick="confirmResetSettings()"><svg class="i"><use href="#i-trash"/></svg>초기화</button>
+        <button class="btn btn-primary" onclick="saveSettings()"><svg class="i"><use href="#i-save"/></svg>저장</button>
       </div>
 
       <div class="section-label">데이터 · 앱</div>
@@ -1143,7 +1179,7 @@ input,select,textarea{font-family:inherit;}
     <!-- ─── GUIDE ─── -->
     <section class="page" id="tab-guide">
       <div class="page-head">
-        <h1 class="page-title">📖 도움말</h1>
+        <h1 class="page-title"><svg class="i"><use href="#i-book"/></svg>도움말</h1>
         <p class="page-sub">StaySMS 사용 방법과 팁을 알려드립니다</p>
       </div>
 
@@ -1158,7 +1194,7 @@ input,select,textarea{font-family:inherit;}
       </div>
 
       <div class="guide-group">
-        <div class="guide-group-title"><span class="ico">⚙️</span>먼저 할 일</div>
+        <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-gear"/></svg></span>먼저 할 일</div>
         <div class="card">
           <div class="guide-item">
             <strong>숙소 프로필</strong> 메뉴에서 숙소 이름, 주소, 계좌, 와이파이, 도어락, 요금을 입력하세요.<br>
@@ -1168,7 +1204,7 @@ input,select,textarea{font-family:inherit;}
       </div>
 
       <div class="guide-group">
-        <div class="guide-group-title"><span class="ico">✏️</span>문자 작성 흐름</div>
+        <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-pencil"/></svg></span>문자 작성 흐름</div>
         <div class="card">
           <div class="guide-item"><strong>1단계</strong> · 문자 작성 → <strong>템플릿 선택</strong> (문의/예약전/확정/입실전/입실후/퇴실)</div>
           <div class="guide-item"><strong>2단계</strong> · 게스트 정보 입력 (이름·연락처·날짜·인원·금액)</div>
@@ -1208,7 +1244,7 @@ input,select,textarea{font-family:inherit;}
       </div>
 
       <div class="guide-group">
-        <div class="guide-group-title"><span class="ico">📱</span>앱으로 설치</div>
+        <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-iphone"/></svg></span>앱으로 설치</div>
         <div class="card">
           <div class="guide-item"><strong>🤖 안드로이드 (Chrome):</strong> ⋮ 메뉴 → 홈 화면에 추가</div>
           <div class="guide-item"><strong>🍎 아이폰 (Safari):</strong> 하단 공유(□↑) → 홈 화면에 추가</div>
@@ -1229,19 +1265,19 @@ input,select,textarea{font-family:inherit;}
 <!-- Bottom nav (mobile) -->
 <nav class="bnav">
   <button class="bnav-btn active" data-tab="home" onclick="switchTab('home')">
-    <span class="bnav-ico">🏠</span><span class="bnav-lbl">홈</span>
+    <span class="bnav-ico"><svg class="i"><use href="#i-home"/></svg></span><span class="bnav-lbl">홈</span>
   </button>
   <button class="bnav-btn" data-tab="compose" onclick="switchTab('compose')">
-    <span class="bnav-ico">✏️</span><span class="bnav-lbl">작성</span>
+    <span class="bnav-ico"><svg class="i"><use href="#i-pencil"/></svg></span><span class="bnav-lbl">작성</span>
   </button>
   <button class="bnav-btn" data-tab="reserv" onclick="switchTab('reserv')">
-    <span class="bnav-ico">📋</span><span class="bnav-lbl">예약</span>
+    <span class="bnav-ico"><svg class="i"><use href="#i-clipboard"/></svg></span><span class="bnav-lbl">예약</span>
   </button>
   <button class="bnav-btn" data-tab="prop" onclick="switchTab('prop')">
-    <span class="bnav-ico">🏡</span><span class="bnav-lbl">숙소</span>
+    <span class="bnav-ico"><svg class="i"><use href="#i-house"/></svg></span><span class="bnav-lbl">숙소</span>
   </button>
   <button class="bnav-btn" data-tab="guide" onclick="switchTab('guide')">
-    <span class="bnav-ico">📖</span><span class="bnav-lbl">도움말</span>
+    <span class="bnav-ico"><svg class="i"><use href="#i-book"/></svg></span><span class="bnav-lbl">도움말</span>
   </button>
 </nav>
 
@@ -1261,7 +1297,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.5.5';
+const APP_VERSION='v1.5.6';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
