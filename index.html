@@ -452,8 +452,25 @@ input,select,textarea{font-family:inherit;}
   border-radius:16px;font-size:11px;color:var(--accent-fg);
   cursor:pointer;font-weight:600;
   transition:all .12s;
+  position:relative;
 }
 .var-chip:hover{background:var(--primary);color:white;}
+.var-chip[data-preview]:hover::after{
+  content:attr(data-preview);
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:#0f172a;color:#fff;
+  padding:6px 10px;border-radius:8px;
+  font-size:11px;font-weight:500;
+  white-space:nowrap;max-width:240px;overflow:hidden;text-overflow:ellipsis;
+  box-shadow:0 6px 18px rgba(0,0,0,0.18);
+  pointer-events:none;z-index:50;
+  letter-spacing:0;
+}
+.var-chip[data-preview]:hover::before{
+  content:'';position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#0f172a;
+  pointer-events:none;z-index:50;
+}
 .emoji-row{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);}
 .emoji-chip{
   padding:4px 7px;font-size:16px;
@@ -1236,7 +1253,7 @@ input,select,textarea{font-family:inherit;}
           <li><strong>② 게스트 정보</strong> — 이름과 연락처 입력. 연락처는 자동 하이픈.</li>
           <li><strong>③ 체크인/체크아웃</strong> — 날짜 버튼을 눌러 입·퇴실을 한번에 선택. 인원·금액도 여기서.</li>
           <li><strong>④ 템플릿 선택</strong> — 단계별 템플릿을 고르면 우측 프리뷰에 실제 문자가 나타납니다.</li>
-          <li><strong>{변수}</strong>는 <code>{이름}</code>, <code>{입실}</code>, <code>{호실}</code>, <code>{와이파이}</code>, <code>{금액}</code> 등이 자동 치환됩니다.</li>
+          <li><strong>{변수}</strong>는 <code>{이름}</code>, <code>{입실시간}</code>, <code>{호실명}</code>, <code>{와이파이이름}</code>, <code>{결제금액}</code> 등이 자동 치환됩니다.</li>
           <li><strong>문자 앱 열기</strong>를 누르면 iOS/Android 문자 앱이 열리고 발송 이력에 자동 기록됩니다.</li>
           <li><strong>예약 저장</strong>으로 이 예약을 "예약/발송 → 예약 목록"에 보관할 수 있어요.</li>
         </ul>
@@ -1362,7 +1379,7 @@ input,select,textarea{font-family:inherit;}
           <li><strong>추가</strong> — 각 단계의 <em>+ 템플릿 추가</em>를 눌러 새 문자를 만듭니다.</li>
           <li><strong>편집</strong> — 템플릿 제목 행을 클릭하면 펼쳐지고, 제목·본문을 수정 후 <em>저장</em>.</li>
           <li><strong>복제</strong> — 비슷한 문자를 빠르게 만들 때 사용 (해당 단계에 복사본 추가).</li>
-          <li><strong>사용 가능한 변수</strong>: <code>{이름}</code> <code>{입실}</code> <code>{퇴실}</code> <code>{인원}</code> <code>{금액}</code> <code>{연락처}</code> <code>{숙소}</code> <code>{호실}</code> <code>{주소}</code> <code>{계좌}</code> <code>{와이파이}</code> <code>{와이파이비번}</code> <code>{비번}</code> <code>{주중요금}</code> <code>{주말요금}</code></li>
+          <li><strong>사용 가능한 변수</strong>: <code>{이름}</code> <code>{입실시간}</code> <code>{퇴실시간}</code> <code>{인원수}</code> <code>{결제금액}</code> <code>{연락처}</code> <code>{숙소명}</code> <code>{호실명}</code> <code>{숙소주소}</code> <code>{입금계좌}</code> <code>{와이파이이름}</code> <code>{와이파이비번}</code> <code>{도어락비번}</code> <code>{주중요금}</code> <code>{주말요금}</code></li>
           <li>변경 사항은 즉시 <strong>문자 작성</strong>에도 반영됩니다.</li>
         </ul>
       </div>
@@ -1413,7 +1430,7 @@ input,select,textarea{font-family:inherit;}
       <div class="help-panel" id="help-prop" style="display:none;">
         <h4>🏠 숙소 프로필 사용 방법</h4>
         <ul>
-          <li><strong>숙소 정보</strong> — 이름·주소·계좌를 입력하면 <code>{숙소}</code> <code>{주소}</code> <code>{계좌}</code> 변수에 자동 반영됩니다.</li>
+          <li><strong>숙소 정보</strong> — 이름·주소·계좌를 입력하면 <code>{숙소명}</code> <code>{숙소주소}</code> <code>{입금계좌}</code> 변수에 자동 반영됩니다.</li>
           <li><strong>호실 관리</strong> — 호실마다 와이파이·도어락을 따로 저장. 다중 호실 운영에 편리합니다.</li>
           <li><strong>도어락 자동</strong> — <em>손님 전화번호 뒷자리 자동 사용</em>을 체크하면 게스트마다 도어락 비번이 자동 생성돼요.</li>
           <li><strong>요금</strong> — 주중·주말 요금을 저장하면 <code>{주중요금}</code> <code>{주말요금}</code>에 반영.</li>
@@ -1611,7 +1628,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.6.6';
+const APP_VERSION='v1.6.9';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -1626,27 +1643,27 @@ let curTplKey=null;
 const STAGES=[
   {id:'inquiry',icon:'💬',label:'문의',
    templates:[
-    {title:'기본 소개',body:`안녕하세요, {이름}님! 😊\n{숙소}입니다.\n\n문의 주셔서 감사해요 🙏\n\n📍 위치: {주소}\n💰 요금: 주중 {주중요금} / 주말 {주말요금}\n🅿️ 주차 가능\n\n날짜와 인원 알려주시면 바로 확인해 드릴게요 😊`},
-    {title:'가격·예약 안내',body:`{이름}님, 반갑습니다 🌿\n\n【 예약 안내 】\n• 입실: 오후 3시 이후\n• 퇴실: 오전 11시까지\n• 예약금: 숙박비의 50% 선입금\n• 계좌: {계좌}\n\n날짜와 인원 알려주시면 바로 확인해 드릴게요 😊`}
+    {title:'기본 소개',body:`안녕하세요, {이름}님! 😊\n{숙소명}입니다.\n\n문의 주셔서 감사해요 🙏\n\n📍 위치: {숙소주소}\n💰 요금: 주중 {주중요금} / 주말 {주말요금}\n🅿️ 주차 가능\n\n날짜와 인원 알려주시면 바로 확인해 드릴게요 😊`},
+    {title:'가격·예약 안내',body:`{이름}님, 반갑습니다 🌿\n\n【 예약 안내 】\n• 입실: 오후 3시 이후\n• 퇴실: 오전 11시까지\n• 예약금: 숙박비의 50% 선입금\n• 계좌: {입금계좌}\n\n날짜와 인원 알려주시면 바로 확인해 드릴게요 😊`}
   ]},
   {id:'prebook',icon:'📋',label:'예약전',
    templates:[
-    {title:'날짜 확인 및 예약금 요청',body:`{이름}님, 좋은 소식이에요! 😊\n\n{입실} ~ {퇴실} ({인원}) 예약 가능합니다 ✅\n\n【 예약금 입금 안내 】\n총 금액: {금액}\n예약금: {금액}의 50%\n계좌: {계좌}\n\n입금 확인 후 예약 확정 문자 드릴게요 🙏`},
-    {title:'날짜 불가 안내',body:`{이름}님, 안녕하세요 😔\n\n죄송하게도 {입실} ~ {퇴실}은 이미 예약된 날짜예요.\n\n다른 날짜로 원하신다면 말씀해 주세요.\n좋은 날에 꼭 뵙고 싶습니다 🍃`}
+    {title:'날짜 확인 및 예약금 요청',body:`{이름}님, 좋은 소식이에요! 😊\n\n{입실시간} ~ {퇴실시간} ({인원수}) 예약 가능합니다 ✅\n\n【 예약금 입금 안내 】\n총 금액: {결제금액}\n예약금: {결제금액}의 50%\n계좌: {입금계좌}\n\n입금 확인 후 예약 확정 문자 드릴게요 🙏`},
+    {title:'날짜 불가 안내',body:`{이름}님, 안녕하세요 😔\n\n죄송하게도 {입실시간} ~ {퇴실시간}은 이미 예약된 날짜예요.\n\n다른 날짜로 원하신다면 말씀해 주세요.\n좋은 날에 꼭 뵙고 싶습니다 🍃`}
   ]},
   {id:'booked',icon:'✅',label:'예약확정',
    templates:[
-    {title:'예약 확정 안내',body:`{이름}님, 예약이 확정됐어요 🎉\n\n【 예약 내역 】\n📅 입실: {입실} 오후 3시 이후\n📅 퇴실: {퇴실} 오전 11시까지\n👥 인원: {인원}\n💰 잔금: {금액} (입실 당일)\n\n좋은 시간 되실 거예요 🌿`},
-    {title:'예약 확정 + 취소 정책',body:`{이름}님, 예약 완료됐습니다 ✅\n\n입실 {입실} / 퇴실 {퇴실}\n인원 {인원} | 총 금액 {금액}\n\n【 취소 정책 】\n• 7일 전: 전액 환불\n• 3~6일 전: 50% 환불\n• 2일 이내: 환불 불가\n\n문의: {연락처} 😊`}
+    {title:'예약 확정 안내',body:`{이름}님, 예약이 확정됐어요 🎉\n\n【 예약 내역 】\n📅 입실: {입실시간} 오후 3시 이후\n📅 퇴실: {퇴실시간} 오전 11시까지\n👥 인원: {인원수}\n💰 잔금: {결제금액} (입실 당일)\n\n좋은 시간 되실 거예요 🌿`},
+    {title:'예약 확정 + 취소 정책',body:`{이름}님, 예약 완료됐습니다 ✅\n\n입실 {입실시간} / 퇴실 {퇴실시간}\n인원 {인원수} | 총 금액 {결제금액}\n\n【 취소 정책 】\n• 7일 전: 전액 환불\n• 3~6일 전: 50% 환불\n• 2일 이내: 환불 불가\n\n문의: {연락처} 😊`}
   ]},
   {id:'precheckin',icon:'🗺️',label:'입실전',
    templates:[
-    {title:'입실 전날 안내',body:`{이름}님, 내일 뵙겠습니다 😊🌿\n\n📍 주소: {주소}\n🚗 네이버지도 검색: {숙소}\n🅿️ 마당 주차 가능\n\n궁금한 점 있으시면 편하게 문자 주세요! 🏡`},
-    {title:'당일 입실 안내',body:`{이름}님, 오늘 오시는 날이네요 🎊\n\n입실: 오후 3시 이후\n잔금: {금액} (현장 수령)\n\n【 도착하시면 】\n대문 비밀번호: {비번}\n열쇠는 현관 안쪽에 있어요.\n\n솔숲의 맑은 공기 환영합니다 🌄`}
+    {title:'입실 전날 안내',body:`{이름}님, 내일 뵙겠습니다 😊🌿\n\n📍 주소: {숙소주소}\n🚗 네이버지도 검색: {숙소명}\n🅿️ 마당 주차 가능\n\n궁금한 점 있으시면 편하게 문자 주세요! 🏡`},
+    {title:'당일 입실 안내',body:`{이름}님, 오늘 오시는 날이네요 🎊\n\n입실: 오후 3시 이후\n잔금: {결제금액} (현장 수령)\n\n【 도착하시면 】\n대문 비밀번호: {도어락비번}\n열쇠는 현관 안쪽에 있어요.\n\n솔숲의 맑은 공기 환영합니다 🌄`}
   ]},
   {id:'checkedin',icon:'🏡',label:'입실후',
    templates:[
-    {title:'체크인 완료 + 이용 안내',body:`{이름}님, 잘 도착하셨나요? 😊\n\n【 이용 안내 】\n🌡 에어컨·난방: 리모컨 사용\n🔥 바베큐: 마당에서 가능\n🧺 세탁기: 세탁실 이용 가능\n📶 와이파이: {와이파이} / {와이파이비번}\n🚭 실내 금연\n\n솔숲에서 좋은 추억 만드세요 🌲`},
+    {title:'체크인 완료 + 이용 안내',body:`{이름}님, 잘 도착하셨나요? 😊\n\n【 이용 안내 】\n🌡 에어컨·난방: 리모컨 사용\n🔥 바베큐: 마당에서 가능\n🧺 세탁기: 세탁실 이용 가능\n📶 와이파이: {와이파이이름} / {와이파이비번}\n🚭 실내 금연\n\n솔숲에서 좋은 추억 만드세요 🌲`},
     {title:'주변 관광·맛집 안내',body:`{이름}님 안녕하세요 😊\n\n【 주변 추천 】\n🍽 식사: 근처 식당 이용 가능\n🛒 마트: 도보 이용 가능\n🌊 관광: 주변 관광지 추천\n\n불편한 점 있으시면 바로 연락 주세요!`}
   ]},
   {id:'checkout',icon:'🙏',label:'퇴실',
@@ -1657,8 +1674,10 @@ const STAGES=[
   ]}
 ];
 
-const VAR_LIST=['{이름}','{입실}','{퇴실}','{인원}','{금액}','{연락처}','{숙소}','{호실}','{주소}','{계좌}','{와이파이}','{와이파이비번}','{비번}','{전번뒷자리}','{주중요금}','{주말요금}'];
-const EMOJI_LIST=['😊','🙏','✅','🎉','🌿','🏡','📅','👥','💰','🚗','🅿️','📶','🔥','🌊','⭐','❤️','😔','🍃','🌄','🌲','🛒','🍽️','🧺','🚭','📍','💬','📋','🎊'];
+const VAR_LIST=['{이름}','{입실시간}','{퇴실시간}','{인원수}','{결제금액}','{연락처}','{숙소명}','{호실명}','{숙소주소}','{입금계좌}','{와이파이이름}','{와이파이비번}','{도어락비번}','{전화뒷자리}','{주중요금}','{주말요금}'];
+const VAR_ALIAS={'{입실}':'{입실시간}','{퇴실}':'{퇴실시간}','{인원}':'{인원수}','{금액}':'{결제금액}','{숙소}':'{숙소명}','{호실}':'{호실명}','{주소}':'{숙소주소}','{계좌}':'{입금계좌}','{와이파이}':'{와이파이이름}','{비번}':'{도어락비번}','{전번뒷자리}':'{전화뒷자리}'};
+function applyVarAliases(s){if(!s)return s;let o=s;for(const k in VAR_ALIAS)o=o.split(k).join(VAR_ALIAS[k]);return o;}
+const EMOJI_LIST=['😊','🙏','✅','🎉','🌿','🏡','📅','👥','💰','🚗','🅿️','📶','🔥','🌊','⭐','❤️','😔','🍃','🌄','🌲','🛒','🍽️','🧺','🚭','📍','💬','📋','🎊','🐶','🐾','🗺️'];
 
 function loadAll(){
   try{const s=localStorage.getItem(SK_SET);if(s)settings={...settings,...JSON.parse(s)};}catch(e){}
@@ -1667,9 +1686,13 @@ function loadAll(){
     const t=localStorage.getItem(SK_TPL);
     if(t){
       const d=JSON.parse(t);
-      if(d.bodies)STAGES.forEach(s=>{const b=d.bodies[s.id];if(b)s.templates.forEach((t,i)=>{if(b[i]!==undefined)t.body=b[i];});});
+      if(d.bodies)STAGES.forEach(s=>{const b=d.bodies[s.id];if(b)s.templates.forEach((t,i)=>{if(b[i]!==undefined)t.body=applyVarAliases(b[i]);});});
       if(d.titles)STAGES.forEach(s=>{const tt=d.titles[s.id];if(tt)s.templates.forEach((t,i)=>{if(tt[i]!==undefined)t.title=tt[i];});});
-      if(d.customs)customs=d.customs;
+      if(d.customs){
+        customs=d.customs;
+        for(const sid in customs){if(Array.isArray(customs[sid]))customs[sid].forEach(t=>{if(t&&t.body)t.body=applyVarAliases(t.body);});}
+      }
+      saveTplStorage();
     }
   }catch(e){}
 }
@@ -1693,7 +1716,16 @@ function getTodayStr(){
   const d=new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
+function varPreview(v){
+  try{
+    const resolved=applyVars(v);
+    if(resolved===v)return '(비어 있음)';
+    const one=resolved.replace(/\n+/g,' ').trim();
+    return one.length>60?one.slice(0,60)+'…':one;
+  }catch(e){return '(비어 있음)';}
+}
 function applyVars(raw){
+  raw=applyVarAliases(raw);
   const ci=document.getElementById('v_checkin').value;
   const co=document.getElementById('v_checkout').value;
   const DOW=['일','월','화','수','목','금','토'];
@@ -1701,18 +1733,18 @@ function applyVars(raw){
   const map={
     '{이름}':document.getElementById('v_name').value||'{이름}',
     '{연락처}':document.getElementById('v_phone').value||'{연락처}',
-    '{입실}':fmt(ci)||'{입실}',
-    '{퇴실}':fmt(co)||'{퇴실}',
-    '{인원}':document.getElementById('v_guests').value||'{인원}',
-    '{금액}':document.getElementById('v_price').value||'{금액}',
-    '{숙소}':settings.name||'{숙소}',
-    '{호실}':(getSelectedRoom()?.name)||'{호실}',
-    '{주소}':settings.addr||'{주소}',
-    '{계좌}':settings.account||'{계좌}',
-    '{와이파이}':(getSelectedRoom()?.wifi)||'{와이파이}',
+    '{입실시간}':fmt(ci)||'{입실시간}',
+    '{퇴실시간}':fmt(co)||'{퇴실시간}',
+    '{인원수}':document.getElementById('v_guests').value||'{인원수}',
+    '{결제금액}':document.getElementById('v_price').value||'{결제금액}',
+    '{숙소명}':settings.name||'{숙소명}',
+    '{호실명}':(getSelectedRoom()?.name)||'{호실명}',
+    '{숙소주소}':settings.addr||'{숙소주소}',
+    '{입금계좌}':settings.account||'{입금계좌}',
+    '{와이파이이름}':(getSelectedRoom()?.wifi)||'{와이파이이름}',
     '{와이파이비번}':(getSelectedRoom()?.wifipw)||'{와이파이비번}',
-    '{전번뒷자리}':(()=>{const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{전번뒷자리}';})(),
-    '{비번}':(()=>{const r=getSelectedRoom();if(r&&r.doorAuto){const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{비번}';}return (r?.door)||'{비번}';})(),
+    '{전화뒷자리}':(()=>{const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{전화뒷자리}';})(),
+    '{도어락비번}':(()=>{const r=getSelectedRoom();if(r&&r.doorAuto){const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{도어락비번}';}return (r?.door)||'{도어락비번}';})(),
     '{주중요금}':fmtPriceVal(settings.pw)||'{주중요금}',
     '{주말요금}':fmtPriceVal(settings.pwe)||'{주말요금}',
   };
@@ -1811,7 +1843,7 @@ function renderPreview(){
 }
 
 function buildVarChips(taId){
-  const vars=VAR_LIST.map(v=>`<button class="var-chip" onclick="insertAtCursor('${v}','${taId}')">${v}</button>`).join('');
+  const vars=VAR_LIST.map(v=>`<button class="var-chip" onmouseenter="this.dataset.preview=varPreview('${v}')" onclick="insertAtCursor('${v}','${taId}')">${v}</button>`).join('');
   const emojis=EMOJI_LIST.map(e=>`<button class="emoji-chip" onclick="insertAtCursor('${e}','${taId}')">${e}</button>`).join('');
   return `<div class="var-chips-wrap">
     <div class="var-chips-label">📌 변수</div>
@@ -2546,7 +2578,7 @@ document.addEventListener('keydown',e=>{
 
 ['appVer','appVerM'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=APP_VERSION;});
 loadAll();loadReservations();loadHistory();fillSettingsFields();buildRoomSelect();buildTplSelect();renderPreview();renderDashboard();
-document.getElementById('guideVarChips').innerHTML=VAR_LIST.map(v=>`<span class="var-chip" style="cursor:default;">${v}</span>`).join('');
+document.getElementById('guideVarChips').innerHTML=VAR_LIST.map(v=>`<span class="var-chip" style="cursor:default;" onmouseenter="this.dataset.preview=varPreview('${v}')">${v}</span>`).join('');
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
