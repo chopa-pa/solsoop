@@ -870,7 +870,7 @@ input,select,textarea{font-family:inherit;}
       <div class="sidebar-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="sidebar-logo">SM</div>
         <div class="sidebar-brand-text">
-          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.15</span></div>
+          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.16</span></div>
           <div class="sidebar-brand-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -909,7 +909,7 @@ input,select,textarea{font-family:inherit;}
       <div class="mheader-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="mheader-logo">SM</div>
         <div>
-          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.15</span></div>
+          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.16</span></div>
           <div class="mheader-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -923,124 +923,119 @@ input,select,textarea{font-family:inherit;}
     <section class="page active" id="tab-home">
 
       <div class="hero">
-        <!-- Background stars/dots pattern -->
+        <!-- Soft abstract background blobs -->
         <svg class="hero-bg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
-            <radialGradient id="g1" cx="20%" cy="30%" r="60%">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+            <radialGradient id="hb1" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
               <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
             </radialGradient>
+            <radialGradient id="hb2" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+            <pattern id="hdot" width="14" height="14" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="0.9" fill="white" opacity="0.12"/>
+            </pattern>
           </defs>
-          <rect width="600" height="200" fill="url(#g1)"/>
-          <!-- Stars -->
-          <g fill="white" opacity="0.55">
-            <circle cx="40" cy="28" r="1.2"/>
-            <circle cx="120" cy="18" r="1"/>
-            <circle cx="210" cy="34" r="1.5"/>
-            <circle cx="300" cy="22" r="1.1"/>
-            <circle cx="380" cy="40" r="1"/>
-            <circle cx="460" cy="25" r="1.3"/>
-            <circle cx="540" cy="35" r="1.1"/>
-          </g>
-          <!-- Moon -->
-          <circle cx="500" cy="50" r="18" fill="#fef3c7" opacity="0.92"/>
-          <circle cx="495" cy="46" r="17" fill="#10b981" opacity="0.3"/>
+          <rect width="600" height="200" fill="url(#hdot)"/>
+          <circle cx="120" cy="60" r="110" fill="url(#hb1)"/>
+          <circle cx="470" cy="150" r="130" fill="url(#hb2)"/>
         </svg>
 
-        <!-- Illustration: lodge + trees + message bubble -->
+        <!-- Clean message-bubbles composition -->
         <div class="hero-art">
           <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- Ground -->
-            <ellipse cx="200" cy="185" rx="180" ry="14" fill="rgba(0,0,0,0.14)"/>
+            <defs>
+              <linearGradient id="phScreen" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ecfdf5"/>
+                <stop offset="100%" stop-color="#ffffff"/>
+              </linearGradient>
+              <linearGradient id="bblMe" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#f0fdf4"/>
+              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3"/>
+              </filter>
+            </defs>
 
-            <!-- Back pine trees -->
-            <g opacity="0.7">
-              <polygon points="60,150 45,180 75,180" fill="#065f46"/>
-              <rect x="57" y="178" width="6" height="8" fill="#065f46"/>
-              <polygon points="290,155 275,180 305,180" fill="#065f46"/>
-              <rect x="287" y="178" width="6" height="8" fill="#065f46"/>
-            </g>
+            <!-- Decorative halo behind phone -->
+            <circle cx="220" cy="100" r="88" fill="white" opacity="0.10"/>
+            <circle cx="220" cy="100" r="64" fill="white" opacity="0.08"/>
 
-            <!-- Front pine tree (left) -->
-            <g>
-              <polygon points="90,130 70,175 110,175" fill="#047857"/>
-              <polygon points="90,115 74,145 106,145" fill="#059669"/>
-              <polygon points="90,100 78,125 102,125" fill="#10b981"/>
-              <rect x="87" y="172" width="6" height="10" fill="#064e3b"/>
-            </g>
+            <!-- Phone (tilted) -->
+            <g transform="translate(220,100) rotate(-10) translate(-55,-95)">
+              <!-- Shadow -->
+              <rect x="6" y="10" width="110" height="190" rx="22" fill="#000" opacity="0.18" filter="url(#softShadow)"/>
+              <!-- Frame -->
+              <rect x="0" y="0" width="110" height="190" rx="22" fill="#0f172a"/>
+              <rect x="4" y="4" width="102" height="182" rx="19" fill="#1e293b"/>
+              <!-- Screen -->
+              <rect x="6" y="6" width="98" height="178" rx="17" fill="url(#phScreen)"/>
+              <!-- Notch -->
+              <rect x="40" y="6" width="30" height="7" rx="3.5" fill="#0f172a"/>
+              <!-- Header -->
+              <rect x="14" y="22" width="44" height="6" rx="3" fill="#10b981"/>
+              <rect x="14" y="32" width="30" height="4" rx="2" fill="#cbd5e1"/>
+              <!-- Divider -->
+              <line x1="10" y1="44" x2="100" y2="44" stroke="#e2e8f0" stroke-width="1"/>
 
-            <!-- Front pine tree (right) -->
-            <g>
-              <polygon points="260,130 240,175 280,175" fill="#047857"/>
-              <polygon points="260,115 244,145 276,145" fill="#059669"/>
-              <polygon points="260,100 248,125 272,125" fill="#10b981"/>
-              <rect x="257" y="172" width="6" height="10" fill="#064e3b"/>
-            </g>
-
-            <!-- House/Lodge -->
-            <g>
-              <!-- Roof shadow -->
-              <polygon points="130,92 175,58 220,92" fill="#7c2d12"/>
-              <!-- Roof -->
-              <polygon points="125,92 175,55 225,92" fill="#a0522d"/>
-              <!-- Chimney -->
-              <rect x="200" y="58" width="10" height="22" fill="#78350f"/>
-              <!-- Smoke -->
-              <g fill="white" opacity="0.7">
-                <circle cx="205" cy="52" r="4"/>
-                <circle cx="212" cy="45" r="5"/>
-                <circle cx="220" cy="36" r="6"/>
+              <!-- Incoming bubble -->
+              <g>
+                <rect x="14" y="54" width="60" height="22" rx="11" fill="#e2e8f0"/>
+                <rect x="20" y="62" width="36" height="3" rx="1.5" fill="#94a3b8"/>
+                <rect x="20" y="68" width="24" height="3" rx="1.5" fill="#94a3b8"/>
               </g>
-              <!-- Body -->
-              <rect x="135" y="92" width="80" height="58" fill="#fef3c7"/>
-              <rect x="135" y="92" width="80" height="58" fill="none" stroke="#d97706" stroke-width="1.5"/>
-              <!-- Wood lines -->
-              <line x1="135" y1="108" x2="215" y2="108" stroke="#d97706" stroke-width="0.8" opacity="0.5"/>
-              <line x1="135" y1="124" x2="215" y2="124" stroke="#d97706" stroke-width="0.8" opacity="0.5"/>
-              <line x1="135" y1="140" x2="215" y2="140" stroke="#d97706" stroke-width="0.8" opacity="0.5"/>
-              <!-- Door -->
-              <rect x="165" y="118" width="20" height="32" fill="#78350f"/>
-              <circle cx="180" cy="134" r="1.5" fill="#fbbf24"/>
-              <!-- Windows (glowing) -->
-              <rect x="143" y="100" width="14" height="12" fill="#fbbf24"/>
-              <rect x="143" y="100" width="14" height="12" fill="none" stroke="#78350f" stroke-width="1"/>
-              <line x1="150" y1="100" x2="150" y2="112" stroke="#78350f" stroke-width="0.8"/>
-              <line x1="143" y1="106" x2="157" y2="106" stroke="#78350f" stroke-width="0.8"/>
 
-              <rect x="193" y="100" width="14" height="12" fill="#fbbf24"/>
-              <rect x="193" y="100" width="14" height="12" fill="none" stroke="#78350f" stroke-width="1"/>
-              <line x1="200" y1="100" x2="200" y2="112" stroke="#78350f" stroke-width="0.8"/>
-              <line x1="193" y1="106" x2="207" y2="106" stroke="#78350f" stroke-width="0.8"/>
+              <!-- Outgoing bubble -->
+              <g>
+                <rect x="36" y="84" width="62" height="24" rx="12" fill="#10b981"/>
+                <rect x="44" y="92" width="36" height="3" rx="1.5" fill="white" opacity="0.9"/>
+                <rect x="44" y="98" width="46" height="3" rx="1.5" fill="white" opacity="0.9"/>
+              </g>
+
+              <!-- Incoming bubble 2 -->
+              <g>
+                <rect x="14" y="116" width="50" height="22" rx="11" fill="#e2e8f0"/>
+                <rect x="20" y="124" width="30" height="3" rx="1.5" fill="#94a3b8"/>
+                <rect x="20" y="130" width="22" height="3" rx="1.5" fill="#94a3b8"/>
+              </g>
+
+              <!-- Typing -->
+              <g transform="translate(36,148)">
+                <rect x="0" y="0" width="36" height="16" rx="8" fill="#10b981"/>
+                <circle cx="10" cy="8" r="2" fill="white"/>
+                <circle cx="18" cy="8" r="2" fill="white" opacity="0.7"/>
+                <circle cx="26" cy="8" r="2" fill="white" opacity="0.45"/>
+              </g>
+
+              <!-- Home indicator -->
+              <rect x="38" y="176" width="34" height="3" rx="1.5" fill="#cbd5e1"/>
             </g>
 
-            <!-- Phone silhouette (bottom right) -->
-            <g transform="translate(245,100)">
-              <rect x="0" y="0" width="36" height="60" rx="5" fill="#1e293b"/>
-              <rect x="2" y="6" width="32" height="48" rx="1" fill="#f8fafc"/>
-              <rect x="2" y="6" width="32" height="10" fill="#10b981"/>
-              <!-- Message lines -->
-              <rect x="5" y="19" width="18" height="2" fill="#10b981" rx="1"/>
-              <rect x="5" y="24" width="22" height="2" fill="#cbd5e1" rx="1"/>
-              <rect x="5" y="29" width="14" height="2" fill="#cbd5e1" rx="1"/>
-              <rect x="5" y="36" width="10" height="2" fill="#10b981" rx="1"/>
-              <rect x="5" y="41" width="20" height="2" fill="#cbd5e1" rx="1"/>
-              <rect x="5" y="46" width="12" height="2" fill="#cbd5e1" rx="1"/>
+            <!-- Floating bubble 1 (top, left of phone) -->
+            <g transform="translate(118,26)">
+              <rect x="0" y="0" width="86" height="36" rx="18" fill="url(#bblMe)" opacity="0.98"/>
+              <polygon points="60,32 68,44 52,34" fill="url(#bblMe)" opacity="0.98"/>
+              <circle cx="16" cy="18" r="5" fill="#10b981"/>
+              <rect x="28" y="12" width="46" height="4" rx="2" fill="#065f46" opacity="0.7"/>
+              <rect x="28" y="20" width="34" height="3" rx="1.5" fill="#10b981" opacity="0.55"/>
             </g>
 
-            <!-- Message bubble floating (sending animation) -->
-            <g transform="translate(210,40)">
-              <rect x="0" y="0" width="46" height="28" rx="10" fill="white" opacity="0.96"/>
-              <polygon points="36,24 42,34 32,28" fill="white" opacity="0.96"/>
-              <text x="8" y="14" font-size="8" fill="#10b981" font-weight="bold" font-family="system-ui,sans-serif">💬 SMS</text>
-              <rect x="8" y="17" width="22" height="1.5" fill="#cbd5e1"/>
-              <rect x="8" y="21" width="30" height="1.5" fill="#cbd5e1"/>
+            <!-- Floating bubble 2 (bottom-left of phone) -->
+            <g transform="translate(100,140)">
+              <rect x="0" y="0" width="70" height="30" rx="15" fill="white" opacity="0.95"/>
+              <polygon points="52,26 60,36 44,28" fill="white" opacity="0.95"/>
+              <rect x="10" y="10" width="34" height="4" rx="2" fill="#10b981" opacity="0.7"/>
+              <rect x="10" y="18" width="24" height="3" rx="1.5" fill="#94a3b8"/>
             </g>
 
-            <!-- Sparkle -->
-            <g fill="#fef3c7">
-              <circle cx="175" cy="30" r="1.5"/>
-              <circle cx="230" cy="25" r="1"/>
-              <circle cx="155" cy="20" r="1.2"/>
+            <!-- Sparkles -->
+            <g fill="#ffffff" opacity="0.85">
+              <path d="M168 14 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z"/>
+              <path d="M306 56 l1.4 4 4 1.4 -4 1.4 -1.4 4 -1.4 -4 -4 -1.4 4 -1.4 z"/>
+              <path d="M190 176 l1.2 3.5 3.5 1.2 -3.5 1.2 -1.2 3.5 -1.2 -3.5 -3.5 -1.2 3.5 -1.2 z"/>
             </g>
           </svg>
         </div>
@@ -1440,7 +1435,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.5.15';
+const APP_VERSION='v1.5.16';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
