@@ -319,6 +319,10 @@ input,select,textarea{font-family:inherit;}
 .btn-row-3{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:10px;}
 .btn-row-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 
+/* ─────── DASHBOARD LAYOUT ─────── */
+.dash-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+@media(min-width:1024px){.dash-grid{grid-template-columns:1fr 1fr;gap:20px;align-items:start;}}
+
 /* ─────── COMPOSE LAYOUT ─────── */
 .compose-grid{display:grid;grid-template-columns:1fr;gap:16px;}
 @media(min-width:1024px){
@@ -853,7 +857,7 @@ input,select,textarea{font-family:inherit;}
       <div class="sidebar-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="sidebar-logo">SM</div>
         <div class="sidebar-brand-text">
-          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.11</span></div>
+          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.12</span></div>
           <div class="sidebar-brand-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -892,7 +896,7 @@ input,select,textarea{font-family:inherit;}
       <div class="mheader-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="mheader-logo">SM</div>
         <div>
-          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.11</span></div>
+          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.12</span></div>
           <div class="mheader-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -1058,18 +1062,20 @@ input,select,textarea{font-family:inherit;}
         </button>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-pin"/></svg></span>오늘 일정 <span id="dashDate" style="margin-left:auto;font-weight:500;color:var(--muted-fg);font-size:12px;"></span></div>
+      <div class="dash-grid">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-pin"/></svg></span>오늘 일정 <span id="dashDate" style="margin-left:auto;font-weight:500;color:var(--muted-fg);font-size:12px;"></span></div>
+          </div>
+          <div class="res-list" id="dashList"></div>
         </div>
-        <div class="res-list" id="dashList"></div>
-      </div>
 
-      <div class="card" id="recentSendsCard" style="display:none;">
-        <div class="card-head">
-          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-clock"/></svg></span>최근 발송<span id="recentSendsMore" style="margin-left:auto;font-size:12px;font-weight:500;color:var(--muted-fg);cursor:pointer;" onclick="goToHistory()">전체 보기 →</span></div>
+        <div class="card" id="recentSendsCard">
+          <div class="card-head">
+            <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-clock"/></svg></span>최근 발송<span id="recentSendsMore" style="margin-left:auto;font-size:12px;font-weight:500;color:var(--muted-fg);cursor:pointer;" onclick="goToHistory()">전체 보기 →</span></div>
+          </div>
+          <div class="res-list" id="dashRecentHist"></div>
         </div>
-        <div class="res-list" id="dashRecentHist"></div>
       </div>
 
       <div class="section-label">빠른 실행</div>
@@ -1425,7 +1431,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.5.11';
+const APP_VERSION='v1.5.12';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -2129,12 +2135,12 @@ function renderDashboard(){
       </div>`).join('');
   }
 
-  const rcard=document.getElementById('recentSendsCard');
-  if(rcard){
+  const rhost=document.getElementById('dashRecentHist');
+  if(rhost){
     const recent=msgHistory.slice(0,5);
-    rcard.style.display=recent.length?'':'none';
-    const rhost=document.getElementById('dashRecentHist');
-    if(rhost){
+    if(!recent.length){
+      rhost.innerHTML='<div class="empty"><span class="emoji">📭</span>아직 발송 이력이 없어요</div>';
+    } else {
       rhost.innerHTML=recent.map(h=>`
       <div class="res-item" onclick="goToHistory()">
         <div class="res-item-main">
