@@ -91,7 +91,8 @@ input,select,textarea{font-family:inherit;}
   padding:20px 20px 18px;
   border-bottom:1px solid var(--sidebar-border);
 }
-.sidebar-brand{display:flex;align-items:center;gap:10px;}
+.sidebar-brand{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
+.sidebar-brand:hover .sidebar-brand-name{color:#a7f3d0;}
 .sidebar-logo{
   width:34px;height:34px;border-radius:var(--radius);
   background:var(--primary);
@@ -151,7 +152,8 @@ input,select,textarea{font-family:inherit;}
   position:sticky;top:0;z-index:80;
   height:56px;
 }
-.mheader-brand{display:flex;align-items:center;gap:10px;}
+.mheader-brand{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
+.mheader-brand:hover .mheader-title{color:var(--accent-fg);}
 .mheader-logo{
   width:30px;height:30px;border-radius:var(--radius);
   background:var(--primary);color:white;
@@ -699,10 +701,10 @@ input,select,textarea{font-family:inherit;}
   <!-- ═══════ SIDEBAR (desktop) ═══════ -->
   <aside class="sidebar">
     <div class="sidebar-head">
-      <div class="sidebar-brand">
+      <div class="sidebar-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="sidebar-logo">S</div>
         <div class="sidebar-brand-text">
-          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.2</span></div>
+          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.3</span></div>
           <div class="sidebar-brand-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -735,10 +737,10 @@ input,select,textarea{font-family:inherit;}
 
     <!-- Mobile header -->
     <header class="mheader">
-      <div class="mheader-brand">
+      <div class="mheader-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
         <div class="mheader-logo">S</div>
         <div>
-          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.2</span></div>
+          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.3</span></div>
           <div class="mheader-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -873,7 +875,7 @@ input,select,textarea{font-family:inherit;}
 
         <div class="hero-content">
           <span class="hero-eyebrow">👋 환영합니다</span>
-          <h1 class="hero-title"><span id="heroPropName">우리 숙소</span><br>예약 문자를 빠르게 💬</h1>
+          <h1 class="hero-title">StayMsg<br>예약 문자를 빠르게 💬</h1>
           <p class="hero-sub">템플릿을 선택하고 게스트 정보만 입력하면, 정성 담긴 문자가 자동으로 완성돼요.</p>
         </div>
       </div>
@@ -1259,7 +1261,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.5.2';
+const APP_VERSION='v1.5.3';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -1651,7 +1653,7 @@ function saveSettings(){
     pwe:document.getElementById('cfg_pwe').value.trim(),
   };
   localStorage.setItem(SK_SET,JSON.stringify(settings));
-  toast('저장됐어요 ✓');renderPreview();renderDashboard();
+  toast('저장됐어요 ✓');renderPreview();
 }
 function toggleDoorAuto(){
   const chk=document.getElementById('cfg_door_auto').checked;
@@ -1744,8 +1746,6 @@ function renderDashboard(){
   const DOW=['일','월','화','수','목','금','토'];
   const d=new Date();
   document.getElementById('dashDate').textContent=`${d.getMonth()+1}.${d.getDate()}(${DOW[d.getDay()]})`;
-  const heroName=document.getElementById('heroPropName');
-  if(heroName)heroName.textContent=settings.name||'우리 숙소';
   const ciList=reservations.filter(r=>r.checkin===today);
   const coList=reservations.filter(r=>r.checkout===today);
   document.getElementById('dashCiNum').textContent=ciList.length;
