@@ -94,11 +94,11 @@ input,select,textarea{font-family:inherit;}
 .sidebar-brand{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
 .sidebar-brand:hover .sidebar-brand-name{color:#a7f3d0;}
 .sidebar-logo{
-  width:34px;height:34px;border-radius:var(--radius);
-  background:var(--primary);
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,#065f46 0%,#10b981 50%,#34d399 100%);
   display:flex;align-items:center;justify-content:center;
-  color:white;font-size:16px;font-weight:800;
-  box-shadow:0 4px 12px rgba(16,185,129,0.3);
+  color:white;font-size:18px;font-weight:800;letter-spacing:-0.02em;
+  box-shadow:0 4px 14px rgba(16,185,129,0.35);
 }
 .sidebar-brand-text{display:flex;flex-direction:column;}
 .sidebar-brand-name{color:white;font-weight:700;font-size:14px;line-height:1;display:flex;align-items:center;gap:6px;}
@@ -155,10 +155,12 @@ input,select,textarea{font-family:inherit;}
 .mheader-brand{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
 .mheader-brand:hover .mheader-title{color:var(--accent-fg);}
 .mheader-logo{
-  width:30px;height:30px;border-radius:var(--radius);
-  background:var(--primary);color:white;
+  width:40px;height:40px;border-radius:11px;
+  background:linear-gradient(135deg,#065f46 0%,#10b981 50%,#34d399 100%);
+  color:white;
   display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:14px;
+  font-weight:800;font-size:16px;letter-spacing:-0.02em;
+  box-shadow:0 3px 10px rgba(16,185,129,0.3);
 }
 .mheader-title{font-weight:700;font-size:15px;color:var(--fg);display:flex;align-items:center;gap:6px;}
 .mheader-ver{
@@ -738,9 +740,9 @@ input,select,textarea{font-family:inherit;}
   <aside class="sidebar">
     <div class="sidebar-head">
       <div class="sidebar-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
-        <div class="sidebar-logo">S</div>
+        <div class="sidebar-logo">SM</div>
         <div class="sidebar-brand-text">
-          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.7</span></div>
+          <div class="sidebar-brand-name">Stay_Msg_lite<span class="sidebar-brand-ver" id="appVer">v1.5.8</span></div>
           <div class="sidebar-brand-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -774,9 +776,9 @@ input,select,textarea{font-family:inherit;}
     <!-- Mobile header -->
     <header class="mheader">
       <div class="mheader-brand" onclick="switchTab('home')" role="button" tabindex="0" aria-label="홈으로">
-        <div class="mheader-logo">S</div>
+        <div class="mheader-logo">SM</div>
         <div>
-          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.7</span></div>
+          <div class="mheader-title">Stay_Msg_lite<span class="mheader-ver" id="appVerM">v1.5.8</span></div>
           <div class="mheader-sub">숙소 예약 문자</div>
         </div>
       </div>
@@ -1297,7 +1299,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.5.7';
+const APP_VERSION='v1.5.8';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
