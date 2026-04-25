@@ -1087,16 +1087,12 @@ input,select,textarea{font-family:inherit;}
 
       
       <div class="hero">
-        <!-- Misty mountain valley illustration (based on 솔숲 view) -->
+        <!-- Line-art pine + A-frame cabin (atmospheric green base) -->
         <svg class="hero-bg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id="hbSky" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
               <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-            </linearGradient>
-            <linearGradient id="hbMist" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.1"/>
             </linearGradient>
             <pattern id="hdot" width="14" height="14" patternUnits="userSpaceOnUse">
               <circle cx="2" cy="2" r="0.9" fill="white" opacity="0.08"/>
@@ -1107,57 +1103,42 @@ input,select,textarea{font-family:inherit;}
           <rect width="600" height="200" fill="url(#hdot)"/>
           <rect width="600" height="120" fill="url(#hbSky)"/>
 
-          <!-- Far mountains (palest, receding) -->
-          <path d="M 0 110 Q 70 78 140 95 T 280 82 Q 360 98 430 78 T 600 95 L 600 140 L 0 140 Z"
-                fill="#052e2a" opacity="0.18"/>
+          <!-- Far mountains (single subtle layer) -->
+          <path d="M 0 130 Q 100 95 200 115 T 400 105 T 600 118 L 600 200 L 0 200 Z"
+                fill="#04231f" opacity="0.22"/>
 
-          <!-- Low mist band 1 (between far and mid) -->
-          <path d="M 0 108 Q 120 100 260 106 T 520 104 Q 580 102 600 106 L 600 118 Q 500 114 380 118 T 140 116 Q 60 118 0 116 Z"
-                fill="url(#hbMist)" opacity="0.7"/>
+          <!-- Horizon ground line -->
+          <line x1="0" y1="180" x2="600" y2="180" stroke="#ecfdf5" stroke-width="0.8" opacity="0.4"/>
 
-          <!-- Mid mountains (with subtle peaks) -->
-          <path d="M 0 135 Q 60 108 110 122 Q 170 88 240 115 Q 310 92 380 118 Q 450 98 510 120 Q 560 110 600 126 L 600 170 L 0 170 Z"
-                fill="#05322d" opacity="0.32"/>
-
-          <!-- Thick rolling fog in valley -->
-          <g opacity="0.85">
-            <path d="M 0 140 Q 80 128 160 138 Q 240 130 320 142 Q 400 134 480 144 Q 540 138 600 146 L 600 168 Q 520 158 420 162 Q 320 168 220 160 Q 120 166 0 160 Z"
-                  fill="#ffffff" opacity="0.55"/>
-            <path d="M 40 152 Q 140 144 260 154 Q 380 148 500 156 Q 560 152 600 156 L 600 170 Q 500 162 380 166 Q 260 170 140 164 Q 80 170 40 166 Z"
-                  fill="#ffffff" opacity="0.4"/>
+          <!-- Pine tree (line-art, layered branches like reference) -->
+          <g stroke="#ecfdf5" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.7">
+            <!-- Trunk -->
+            <line x1="240" y1="180" x2="240" y2="48"/>
+            <!-- Top peak (small triangle) -->
+            <path d="M 232 60 L 240 48 L 248 60"/>
+            <!-- Layered V-branches, widening toward bottom -->
+            <path d="M 226 73 L 240 65 L 254 73"/>
+            <path d="M 222 88 L 240 78 L 258 88"/>
+            <path d="M 217 104 L 240 92 L 263 104"/>
+            <path d="M 211 121 L 240 107 L 269 121"/>
+            <path d="M 205 139 L 240 122 L 275 139"/>
+            <path d="M 198 158 L 240 138 L 282 158"/>
+            <path d="M 192 178 L 240 156 L 288 178"/>
           </g>
 
-          <!-- Near mountains (darkest, with tree texture) -->
-          <path d="M 0 200 L 0 150 Q 50 135 100 145 Q 160 120 220 138 Q 290 112 350 135 Q 420 115 470 138 Q 530 125 600 140 L 600 200 Z"
-                fill="#04231f" opacity="0.48"/>
-
-          <!-- Pine ridge silhouettes on near mountain -->
-          <g fill="#04231f" opacity="0.62">
-            <polygon points="60,148 53,165 67,165"/>
-            <polygon points="60,140 55,152 65,152"/>
-            <polygon points="120,160 113,178 127,178"/>
-            <polygon points="120,153 115,165 125,165"/>
-            <polygon points="210,148 203,168 217,168"/>
-            <polygon points="340,150 333,170 347,170"/>
-            <polygon points="340,142 335,155 345,155"/>
-            <polygon points="420,158 413,178 427,178"/>
-          </g>
-
-          <!-- Cabin (center-right, symmetric roof) -->
-          <g opacity="0.85">
-            <!-- Roof (symmetric triangle) -->
-            <polygon points="295,172 320,148 345,172" fill="#0b1917"/>
-            <!-- Body -->
-            <rect x="302" y="172" width="36" height="20" fill="#1a1410"/>
-            <!-- Tiny window -->
-            <rect x="317" y="178" width="6" height="6" fill="#fef3c7" opacity="0.8"/>
-          </g>
-
-          <!-- Large foreground pine (bottom-left, framing) -->
-          <g opacity="0.7">
-            <ellipse cx="20" cy="190" rx="35" ry="22" fill="#04231f"/>
-            <ellipse cx="35" cy="180" rx="28" ry="20" fill="#052e2a"/>
-            <ellipse cx="10" cy="175" rx="22" ry="16" fill="#052e2a"/>
+          <!-- A-frame cabin (line-art, warm amber) -->
+          <g stroke="#fcd34d" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.78">
+            <!-- A-frame roof outline -->
+            <path d="M 320 180 L 360 112 L 400 180 Z"/>
+            <!-- Roof grain lines (radiating wood planks) -->
+            <line x1="346" y1="135" x2="346" y2="180"/>
+            <line x1="374" y1="135" x2="374" y2="180"/>
+            <line x1="334" y1="156" x2="334" y2="180"/>
+            <line x1="386" y1="156" x2="386" y2="180"/>
+            <!-- Door (centered front) -->
+            <path d="M 356 180 L 356 158 L 365 158 L 365 180"/>
+            <!-- Small window -->
+            <rect x="372" y="148" width="8" height="8"/>
           </g>
         </svg>
 
@@ -1751,7 +1732,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.1.3';
+const APP_VERSION='v2.1.4';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
