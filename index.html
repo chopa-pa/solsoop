@@ -1757,7 +1757,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.2.3';
+const APP_VERSION='v2.2.5';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -1808,6 +1808,18 @@ const VAR_ALIAS={'{입실}':'{입실시간}','{퇴실}':'{퇴실시간}','{인�
 function applyVarAliases(s){if(!s)return s;let o=s;for(const k in VAR_ALIAS)o=o.split(k).join(VAR_ALIAS[k]);return o;}
 const EMOJI_LIST=['😊','🙏','✅','🎉','🌿','🏡','📅','👥','💰','🚗','🅿️','📶','🔥','🌊','⭐','❤️','😔','🍃','🌄','🌲','🛒','🍽️','🧺','🚭','📍','💬','📋','🎊','🐶','🐾','🗺️'];
 
+function ensureSingleBaseTpl(){
+  const FLAG='stay_msg_lite1_tpl_singlebase_v1';
+  const migrated=!!localStorage.getItem(FLAG);
+  STAGES.forEach(s=>{
+    if(s.templates.length>1){
+      const extras=s.templates.slice(1).map(t=>({title:t.title,body:t.body}));
+      s.templates=s.templates.slice(0,1);
+      if(!migrated)customs[s.id]=[...extras,...(customs[s.id]||[])];
+    }
+  });
+  if(!migrated)localStorage.setItem(FLAG,'1');
+}
 function loadAll(){
   try{const s=localStorage.getItem(SK_SET);if(s)settings={...settings,...JSON.parse(s)};}catch(e){}
   migrateSettings();
@@ -1821,8 +1833,9 @@ function loadAll(){
         customs=d.customs;
         for(const sid in customs){if(Array.isArray(customs[sid]))customs[sid].forEach(t=>{if(t&&t.body)t.body=applyVarAliases(t.body);});}
       }
-      saveTplStorage();
     }
+    ensureSingleBaseTpl();
+    saveTplStorage();
   }catch(e){}
 }
 function saveTplStorage(){
@@ -1992,6 +2005,23 @@ function insertAtCursor(v,taId){
 }
 // ─────── TEMPLATES MANAGEMENT ───────
 let editingTplKey=null;
+let newlyCreatedTplKey=null;
+function discardNewIfPristine(){
+  if(!newlyCreatedTplKey)return;
+  const key=newlyCreatedTplKey;
+  newlyCreatedTplKey=null;
+  const titleEl=document.getElementById('edt_title_'+key.replace(':','_'));
+  const bodyEl=document.getElementById('edt_body_'+key.replace(':','_'));
+  const curTitle=titleEl?titleEl.value:'새 템플릿';
+  const curBody=bodyEl?bodyEl.value:'내용을 입력하세요.';
+  if(curTitle!=='새 템플릿'||curBody!=='내용을 입력하세요.')return;
+  const [sid,idx]=key.split(':');
+  const s=STAGES.find(x=>x.id===sid);if(!s)return;
+  const ci=(+idx)-s.templates.length;
+  if(ci<0||!customs[s.id]||!customs[s.id][ci])return;
+  customs[s.id].splice(ci,1);
+  saveTplStorage();buildTplSelect();
+}
 const openStages=new Set();
 
 function renderTemplatesPage(){
@@ -2068,6 +2098,7 @@ function openStageAndEdit(key){
 
 function toggleStage(stageId){
   if(openStages.has(stageId)){
+    if(newlyCreatedTplKey&&newlyCreatedTplKey.startsWith(stageId+':'))discardNewIfPristine();
     openStages.delete(stageId);
     if(editingTplKey&&editingTplKey.startsWith(stageId+':'))editingTplKey=null;
   } else {
@@ -2098,6 +2129,7 @@ function renderTplEditor(key,t,isCustom){
 }
 
 function toggleTplRow(key){
+  if(newlyCreatedTplKey&&editingTplKey===newlyCreatedTplKey)discardNewIfPristine();
   editingTplKey=(editingTplKey===key)?null:key;
   renderTemplatesPage();
   if(editingTplKey){
@@ -2128,16 +2160,19 @@ function saveTplFromRow(key){
   }
   saveTplStorage();buildTplSelect();
   editingTplKey=null;
+  newlyCreatedTplKey=null;
   renderTemplatesPage();renderPreview();toast('저장됐어요 ✓');
 }
 
 function addTplInStage(stageId){
+  discardNewIfPristine();
   const s=STAGES.find(x=>x.id===stageId);if(!s)return;
   (customs[s.id]=customs[s.id]||[]).push({title:'새 템플릿',body:'내용을 입력하세요.'});
   saveTplStorage();buildTplSelect();
   const newIdx=s.templates.length+customs[s.id].length-1;
   openStages.add(s.id);
   editingTplKey=`${s.id}:${newIdx}`;
+  newlyCreatedTplKey=editingTplKey;
   renderTemplatesPage();toast('템플릿이 추가됐어요 ＋');
 }
 
