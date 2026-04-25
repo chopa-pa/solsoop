@@ -1352,7 +1352,8 @@ input,select,textarea{font-family:inherit;}
                 </div>
                 <div class="fi">
                   <label>연락처</label>
-                  <input class="input" type="tel" id="v_phone" placeholder="010-0000-0000" oninput="fmtPhone(this)" maxlength="13">
+                  <input class="input" type="tel" id="v_phone" placeholder="010-0000-0000" list="phoneSuggest" oninput="fmtPhone(this)" onblur="rememberPhone(this.value)" maxlength="13" autocomplete="off">
+                  <datalist id="phoneSuggest"></datalist>
                 </div>
               </div>
             </div>
@@ -1727,7 +1728,8 @@ input,select,textarea{font-family:inherit;}
       </div>
       <div class="fi">
         <label>전화번호</label>
-        <input class="input" type="tel" id="ar_phone" placeholder="010-0000-0000" oninput="fmtPhone(this)" maxlength="13">
+        <input class="input" type="tel" id="ar_phone" placeholder="010-0000-0000" list="arPhoneSuggest" oninput="fmtPhone(this)" onblur="rememberPhone(this.value)" maxlength="13" autocomplete="off">
+        <datalist id="arPhoneSuggest"></datalist>
       </div>
     </div>
     <div class="fi" style="margin-top:10px;">
@@ -1767,7 +1769,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.3.4';
+const APP_VERSION='v2.3.5';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -1775,6 +1777,7 @@ const SK_LAST='stay_msg_lite1_last_tpl';
 const SK_HIST='stay_msg_lite1_hist_v1';
 const SK_ROOM='stay_msg_lite1_last_room';
 const SK_NAMES='stay_msg_lite1_typed_names';
+const SK_PHONES='stay_msg_lite1_typed_phones';
 
 let settings={name:'',addr:'',account:'',rooms:[]};
 let customs={};
@@ -2806,10 +2809,13 @@ function submitAddResv(){
 // ─────── RESERVATIONS ───────
 let reservations=[];
 function loadReservations(){try{reservations=JSON.parse(localStorage.getItem(SK_RES)||'[]');}catch{reservations=[];}}
-function saveReservations(){localStorage.setItem(SK_RES,JSON.stringify(reservations));buildNameSuggest();}
+function saveReservations(){localStorage.setItem(SK_RES,JSON.stringify(reservations));buildNameSuggest();buildPhoneSuggest();}
 let typedNames=[];
+let typedPhones=[];
 function loadTypedNames(){try{typedNames=JSON.parse(localStorage.getItem(SK_NAMES)||'[]');}catch{typedNames=[];}}
 function saveTypedNames(){localStorage.setItem(SK_NAMES,JSON.stringify(typedNames));}
+function loadTypedPhones(){try{typedPhones=JSON.parse(localStorage.getItem(SK_PHONES)||'[]');}catch{typedPhones=[];}}
+function saveTypedPhones(){localStorage.setItem(SK_PHONES,JSON.stringify(typedPhones));}
 function rememberName(n){
   n=(n||'').trim();
   if(!n)return;
@@ -2818,6 +2824,14 @@ function rememberName(n){
   if(typedNames.length>50)typedNames=typedNames.slice(0,50);
   saveTypedNames();buildNameSuggest();
 }
+function rememberPhone(p){
+  p=(p||'').trim();
+  if(!p||p.replace(/\D/g,'').length<7)return;
+  typedPhones=typedPhones.filter(x=>x!==p);
+  typedPhones.unshift(p);
+  if(typedPhones.length>50)typedPhones=typedPhones.slice(0,50);
+  saveTypedPhones();buildPhoneSuggest();
+}
 function buildNameSuggest(){
   const seen=new Set();const names=[];
   reservations.forEach(r=>{if(r.name&&!seen.has(r.name)){seen.add(r.name);names.push(r.name);}});
@@ -2825,6 +2839,15 @@ function buildNameSuggest(){
   names.sort((a,b)=>a.localeCompare(b,'ko'));
   const opts=names.map(n=>`<option value="${esc(n)}">`).join('');
   ['nameSuggest','arNameSuggest'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.innerHTML=opts;
+  });
+}
+function buildPhoneSuggest(){
+  const seen=new Set();const list=[];
+  reservations.forEach(r=>{if(r.phone&&!seen.has(r.phone)){seen.add(r.phone);list.push(r.phone);}});
+  typedPhones.forEach(p=>{if(p&&!seen.has(p)){seen.add(p);list.push(p);}});
+  const opts=list.map(p=>`<option value="${esc(p)}">`).join('');
+  ['phoneSuggest','arPhoneSuggest'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.innerHTML=opts;
   });
 }
@@ -3110,7 +3133,7 @@ document.addEventListener('keydown',e=>{
 });
 
 ['appVer','appVerM'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=APP_VERSION;});
-loadAll();loadReservations();loadHistory();loadTypedNames();fillSettingsFields();buildRoomSelect();buildTplSelect();renderPreview();renderDashboard();buildNameSuggest();
+loadAll();loadReservations();loadHistory();loadTypedNames();loadTypedPhones();fillSettingsFields();buildRoomSelect();buildTplSelect();renderPreview();renderDashboard();buildNameSuggest();buildPhoneSuggest();
 document.getElementById('guideVarChips').innerHTML=VAR_LIST.map(v=>`<span class="var-chip" style="cursor:default;" onmouseenter="this.dataset.preview=varPreview('${v}')">${v}</span>`).join('');
 
 if('serviceWorker' in navigator){
