@@ -1719,15 +1719,17 @@ input,select,textarea{font-family:inherit;}
         <input class="input" type="tel" id="ar_phone" placeholder="010-0000-0000" oninput="fmtPhone(this)" maxlength="13">
       </div>
     </div>
-    <div class="form-grid" style="margin-top:10px;">
-      <div class="fi">
-        <label><span class="req">*</span>체크인</label>
-        <input class="input" type="date" id="ar_checkin">
+    <div class="fi" style="margin-top:10px;">
+      <label>호실</label>
+      <select class="select" id="ar_room"></select>
+    </div>
+    <div class="fi" style="margin-top:10px;">
+      <label><span class="req">*</span>입실 · 퇴실</label>
+      <div class="date-btn" id="arDateRangeBtn" onclick="openDatePicker('ar_checkin','ar_checkout','arDateRangeBtn')">
+        <div class="drb-placeholder">📅 날짜를 선택하세요</div>
       </div>
-      <div class="fi">
-        <label><span class="req">*</span>체크아웃</label>
-        <input class="input" type="date" id="ar_checkout">
-      </div>
+      <input type="hidden" id="ar_checkin">
+      <input type="hidden" id="ar_checkout">
     </div>
     <div class="form-grid" style="margin-top:10px;">
       <div class="fi">
@@ -1754,7 +1756,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.2.0';
+const APP_VERSION='v2.2.1';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -2240,11 +2242,14 @@ function _ymPickerHtml(y,m){
 }
 function _calSetYM(y,m){_cal.y=y;_cal.m=m;_cal.ym=false;_renderCal();}
 function _calYearStep(d){_cal.y+=d;_renderCal();}
-function openDatePicker(){
+function openDatePicker(ciId,coId,btnId){
+  _cal.targetCi=ciId||'v_checkin';
+  _cal.targetCo=coId||'v_checkout';
+  _cal.targetBtn=btnId||'dateRangeBtn';
   const today=new Date();
   _cal.y=today.getFullYear();_cal.m=today.getMonth();
-  _cal.ci=document.getElementById('v_checkin').value||null;
-  _cal.co=document.getElementById('v_checkout').value||null;
+  _cal.ci=document.getElementById(_cal.targetCi).value||null;
+  _cal.co=document.getElementById(_cal.targetCo).value||null;
   _cal.step='ci';_cal.ym=false;_renderCal();
 }
 function _renderCal(){
@@ -2316,15 +2321,19 @@ function _calPick(ds){
 }
 function _calNav(d){_cal.m+=d;if(_cal.m<0){_cal.m=11;_cal.y--;}else if(_cal.m>11){_cal.m=0;_cal.y++;}_renderCal();}
 function _calConfirm(){
-  document.getElementById('v_checkin').value=_cal.ci||'';
-  document.getElementById('v_checkout').value=_cal.co||'';
+  const ciId=_cal.targetCi||'v_checkin';
+  const coId=_cal.targetCo||'v_checkout';
+  document.getElementById(ciId).value=_cal.ci||'';
+  document.getElementById(coId).value=_cal.co||'';
   document.getElementById('_calModal').innerHTML='';
-  _updateDateDisplay();renderPreview();
+  _updateDateDisplay(ciId,coId,_cal.targetBtn||'dateRangeBtn');
+  if(ciId==='v_checkin')renderPreview();
 }
-function _updateDateDisplay(){
-  const ci=document.getElementById('v_checkin').value;
-  const co=document.getElementById('v_checkout').value;
-  const btn=document.getElementById('dateRangeBtn');
+function _updateDateDisplay(ciId,coId,btnId){
+  ciId=ciId||'v_checkin';coId=coId||'v_checkout';btnId=btnId||'dateRangeBtn';
+  const ci=document.getElementById(ciId).value;
+  const co=document.getElementById(coId).value;
+  const btn=document.getElementById(btnId);
   if(!btn)return;
   const DOW=['일','월','화','수','목','금','토'];
   function fmt(ds){const d=new Date(ds+'T00:00:00');return`${d.getMonth()+1}.${d.getDate()}(${DOW[d.getDay()]})`;}
@@ -2665,8 +2674,16 @@ function copyHistBody(id){
 }
 function goToHistory(){switchTab('history');}
 
+function _fillArRoomSelect(selId){
+  const sel=document.getElementById('ar_room');if(!sel)return;
+  if(!settings.rooms||!settings.rooms.length){sel.innerHTML='<option value="">(등록된 호실 없음)</option>';return;}
+  sel.innerHTML='<option value="">선택 안함</option>'+settings.rooms.map(r=>`<option value="${r.id}">${esc(r.name||'(이름 없음)')}</option>`).join('');
+  if(selId&&settings.rooms.find(x=>x.id===selId))sel.value=selId;
+}
 function openAddResvModal(){
   ['ar_name','ar_phone','ar_checkin','ar_checkout','ar_guests','ar_price','ar_id'].forEach(id=>{document.getElementById(id).value='';});
+  _fillArRoomSelect();
+  _updateDateDisplay('ar_checkin','ar_checkout','arDateRangeBtn');
   document.getElementById('addResvTitle').textContent='새 예약 추가';
   document.getElementById('addResvSaveBtn').textContent='저장';
   document.getElementById('addResvModal').classList.add('open');
@@ -2682,6 +2699,8 @@ function editResv(id,e){
   document.getElementById('ar_checkout').value=r.checkout||'';
   document.getElementById('ar_guests').value=r.guests||'';
   document.getElementById('ar_price').value=r.price||'';
+  _fillArRoomSelect(r.roomId||'');
+  _updateDateDisplay('ar_checkin','ar_checkout','arDateRangeBtn');
   document.getElementById('addResvTitle').textContent='예약 수정';
   document.getElementById('addResvSaveBtn').textContent='수정';
   document.getElementById('addResvModal').classList.add('open');
@@ -2697,6 +2716,7 @@ function submitAddResv(){
   if(co<ci){toast('체크아웃은 체크인 이후여야 해요');return;}
   const dup=reservations.find(r=>r.id!==id&&r.name===name&&r.checkin===ci&&r.checkout===co);
   if(dup){toast('이미 같은 예약이 있어요');return;}
+  const roomId=document.getElementById('ar_room').value;
   if(id){
     const r=reservations.find(x=>x.id===id);if(!r){closeAddResvModal();return;}
     r.name=name;
@@ -2704,6 +2724,7 @@ function submitAddResv(){
     r.checkin=ci;r.checkout=co;
     r.guests=document.getElementById('ar_guests').value;
     r.price=document.getElementById('ar_price').value;
+    r.roomId=roomId;
     saveReservations();renderReservations();renderDashboard();
     closeAddResvModal();
     toast('예약이 수정됐어요 ✓');
@@ -2714,6 +2735,7 @@ function submitAddResv(){
       checkin:ci,checkout:co,
       guests:document.getElementById('ar_guests').value,
       price:document.getElementById('ar_price').value,
+      roomId,
       createdAt:new Date().toISOString()
     });
     saveReservations();renderReservations();renderDashboard();
@@ -2768,6 +2790,10 @@ function loadReservation(id,contextDate){
   document.getElementById('v_checkout').value=r.checkout||'';
   document.getElementById('v_guests').value=r.guests||'';
   document.getElementById('v_price').value=r.price||'';
+  const roomSel=document.getElementById('v_room');
+  if(roomSel&&r.roomId&&settings.rooms.find(x=>x.id===r.roomId)){
+    roomSel.value=r.roomId;localStorage.setItem(SK_ROOM,r.roomId);
+  }
   _cal.ci=r.checkin||null;_cal.co=r.checkout||null;
   _updateDateDisplay();switchTab('compose');
   const sel=document.getElementById('tplSelect');
