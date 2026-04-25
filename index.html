@@ -1582,7 +1582,7 @@ input,select,textarea{font-family:inherit;}
         <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-rocket"/></svg></span>시작하기</div>
         <div class="card">
           <div class="guide-item">
-            이 앱은 <strong>숙소 예약 문자 템플릿</strong>을 빠르게 작성·발송하는 도구입니다.<br>
+            이 앱은 <strong>숙소 예약 문자 템플릿</strong>을 빠르게 작성·발송하고, 예약·발송 이력을 한 곳에서 관리하는 도구입니다.<br>
             게스트 정보를 입력하면 템플릿에 변수가 자동으로 채워집니다.
           </div>
         </div>
@@ -1592,9 +1592,18 @@ input,select,textarea{font-family:inherit;}
         <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-gear"/></svg></span>먼저 할 일</div>
         <div class="card">
           <div class="guide-item">
-            <strong>숙소 프로필</strong> 메뉴에서 숙소 이름, 주소, 계좌, 와이파이, 도어락, 요금을 입력하세요.<br>
+            <strong>숙소 프로필</strong> 메뉴에서 숙소 이름·주소·계좌·와이파이·도어락·요금·호실을 입력하세요.<br>
             → 문자 템플릿에 자동으로 채워집니다.
           </div>
+        </div>
+      </div>
+
+      <div class="guide-group">
+        <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-home"/></svg></span>대시보드</div>
+        <div class="card">
+          <div class="guide-item"><strong>캘린더</strong> · 월간 일정을 한눈에 보고, 날짜를 누르면 해당 예약이 문자 작성에 자동 로드됩니다. (한 날짜에 예약이 여러 건이면 강조 표시)</div>
+          <div class="guide-item"><strong>통계 칩</strong> · 캘린더 아래 체크인·체크아웃·7일 내·총 예약 건수를 실시간 표시.</div>
+          <div class="guide-item"><strong>최근 발송</strong> · 최근 5건 미리보기. <em>전체 보기 →</em>로 발송 이력 페이지 이동.</div>
         </div>
       </div>
 
@@ -1604,8 +1613,27 @@ input,select,textarea{font-family:inherit;}
           <div class="guide-item"><strong>1단계</strong> · 문자 작성 → <strong>템플릿 선택</strong> (문의/예약전/확정/입실전/입실후/퇴실)</div>
           <div class="guide-item"><strong>2단계</strong> · 게스트 정보 입력 (이름·연락처·날짜·인원·금액)</div>
           <div class="guide-item"><strong>3단계</strong> · 오른쪽 <strong>미리보기</strong>에서 확인 (SMS/LMS/MMS 자동 판별)</div>
-          <div class="guide-item"><strong>4단계</strong> · <strong>텍스트 복사</strong> 또는 <strong>문자 앱 열기</strong>로 발송</div>
-          <div class="guide-item"><strong>5단계</strong> · <strong>예약 저장</strong>으로 대시보드·예약 목록에 기록</div>
+          <div class="guide-item"><strong>4단계</strong> · <strong>텍스트 복사</strong> 또는 <strong>문자 앱 열기</strong>로 발송 (이력 자동 저장)</div>
+          <div class="guide-item"><strong>5단계</strong> · <strong>예약 저장</strong>으로 예약 목록에 기록</div>
+        </div>
+      </div>
+
+      <div class="guide-group">
+        <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-clipboard"/></svg></span>예약 관리</div>
+        <div class="card">
+          <div class="guide-item"><strong>새 예약 추가</strong> · 예약 페이지 우측 상단 버튼으로 이름·전화·날짜·인원·금액을 직접 입력해 예약을 만들 수 있어요. (문자 작성을 거치지 않아도 됨)</div>
+          <div class="guide-item"><strong>문자 작성에서 저장</strong> · 작성 탭의 <em>예약 저장</em>으로도 예약이 추가됩니다.</div>
+          <div class="guide-item"><strong>카드 클릭</strong> · 해당 예약이 문자 작성에 자동 로드돼요.</div>
+          <div class="guide-item"><strong>오늘 입실·퇴실·예정</strong> 라벨로 상태를 한눈에 확인.</div>
+        </div>
+      </div>
+
+      <div class="guide-group">
+        <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-paperplane"/></svg></span>발송 이력</div>
+        <div class="card">
+          <div class="guide-item"><strong>자동 저장</strong> · <em>문자 앱 열기</em>를 누른 모든 발송 기록이 자동으로 쌓입니다.</div>
+          <div class="guide-item"><strong>다시 보내기</strong> · 이력의 문자 내용 그대로 문자 앱이 다시 열려요.</div>
+          <div class="guide-item"><strong>복사 / 삭제</strong> · 이력별 개별 조작, <em>전체 삭제</em>로 일괄 초기화도 가능.</div>
         </div>
       </div>
 
@@ -1622,8 +1650,8 @@ input,select,textarea{font-family:inherit;}
       <div class="guide-group">
         <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-pencil"/></svg></span>템플릿 편집</div>
         <div class="card">
-          <div class="guide-item"><strong>✏️ 템플릿 편집</strong> 버튼으로 제목과 내용을 직접 수정할 수 있어요.<br><span class="sub">· 변수 칩/이모지 칩을 탭하면 커서 위치에 삽입</span><span class="sub">· 저장을 눌러야 최종 저장</span></div>
-          <div class="guide-item"><strong>＋ 새 템플릿</strong> 버튼으로 원하는 단계에 템플릿을 추가할 수 있어요.</div>
+          <div class="guide-item"><strong>템플릿 편집</strong> 버튼으로 제목과 내용을 직접 수정할 수 있어요.<br><span class="sub">· 변수 칩/이모지 칩을 탭하면 커서 위치에 삽입</span><span class="sub">· 저장을 눌러야 최종 저장</span></div>
+          <div class="guide-item"><strong>새 템플릿</strong> 버튼으로 원하는 단계에 템플릿을 추가할 수 있어요.</div>
           <div class="guide-item"><strong>기본 템플릿</strong>은 삭제 불가(수정만 가능). 직접 만든 템플릿은 삭제 가능.</div>
         </div>
       </div>
@@ -1641,9 +1669,9 @@ input,select,textarea{font-family:inherit;}
       <div class="guide-group">
         <div class="guide-group-title"><span class="ico"><svg class="i"><use href="#i-iphone"/></svg></span>앱으로 설치</div>
         <div class="card">
-          <div class="guide-item"><strong>🤖 안드로이드 (Chrome):</strong> ⋮ 메뉴 → 홈 화면에 추가</div>
-          <div class="guide-item"><strong>🍎 아이폰 (Safari):</strong> 하단 공유(□↑) → 홈 화면에 추가</div>
-          <div class="guide-item"><strong>💻 PC (Chrome/Edge):</strong> 주소창 오른쪽 설치(⊕) 아이콘 클릭</div>
+          <div class="guide-item"><strong>안드로이드 (Chrome):</strong> ⋮ 메뉴 → 홈 화면에 추가</div>
+          <div class="guide-item"><strong>아이폰 (Safari):</strong> 하단 공유 버튼 → 홈 화면에 추가</div>
+          <div class="guide-item"><strong>PC (Chrome/Edge):</strong> 주소창 오른쪽 설치 아이콘 클릭</div>
         </div>
       </div>
 
@@ -1736,7 +1764,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.1.5';
+const APP_VERSION='v2.1.6';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
