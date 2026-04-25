@@ -642,10 +642,15 @@ input,select,textarea{font-family:inherit;}
 }
 .resv-card-date{font-size:12px;color:var(--muted-fg);margin-top:4px;display:flex;align-items:center;gap:4px;}
 .resv-card-extra{font-size:11px;color:var(--muted-fg-2);margin-top:3px;}
-.resv-card-del{
+.resv-card-actions{display:flex;flex-direction:column;gap:2px;}
+.resv-card-edit,.resv-card-del{
   border:none;background:none;cursor:pointer;
-  color:var(--muted-fg-2);font-size:16px;padding:4px 8px;border-radius:6px;
+  color:var(--muted-fg-2);padding:4px 8px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
 }
+.resv-card-edit{font-size:14px;}
+.resv-card-edit:hover{background:#ecfdf5;color:var(--primary);}
+.resv-card-del{font-size:16px;}
 .resv-card-del:hover{background:var(--destructive-bg);color:var(--destructive);}
 
 /* ─────── GUIDE ─────── */
@@ -1700,7 +1705,8 @@ input,select,textarea{font-family:inherit;}
 
 <div class="modal-ov" id="addResvModal">
   <div class="modal" style="max-width:420px;">
-    <h3 style="margin-bottom:14px;">새 예약 추가</h3>
+    <h3 id="addResvTitle" style="margin-bottom:14px;">새 예약 추가</h3>
+    <input type="hidden" id="ar_id">
     <div class="form-grid">
       <div class="fi">
         <label><span class="req">*</span>손님 이름</label>
@@ -1737,7 +1743,7 @@ input,select,textarea{font-family:inherit;}
     </div>
     <div class="modal-btns" style="margin-top:18px;">
       <button class="btn btn-outline" onclick="closeAddResvModal()">취소</button>
-      <button class="btn btn-primary" onclick="submitAddResv()">저장</button>
+      <button class="btn btn-primary" id="addResvSaveBtn" onclick="submitAddResv()">저장</button>
     </div>
   </div>
 </div>
@@ -1746,7 +1752,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.1.8';
+const APP_VERSION='v2.1.9';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -2658,31 +2664,60 @@ function copyHistBody(id){
 function goToHistory(){switchTab('history');}
 
 function openAddResvModal(){
-  ['ar_name','ar_phone','ar_checkin','ar_checkout','ar_guests','ar_price'].forEach(id=>{document.getElementById(id).value='';});
+  ['ar_name','ar_phone','ar_checkin','ar_checkout','ar_guests','ar_price','ar_id'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('addResvTitle').textContent='새 예약 추가';
+  document.getElementById('addResvSaveBtn').textContent='저장';
   document.getElementById('addResvModal').classList.add('open');
   setTimeout(()=>document.getElementById('ar_name').focus(),50);
 }
+function editResv(id,e){
+  if(e){e.stopPropagation();e.preventDefault();}
+  const r=reservations.find(x=>x.id===id);if(!r)return;
+  document.getElementById('ar_id').value=r.id;
+  document.getElementById('ar_name').value=r.name||'';
+  document.getElementById('ar_phone').value=r.phone||'';
+  document.getElementById('ar_checkin').value=r.checkin||'';
+  document.getElementById('ar_checkout').value=r.checkout||'';
+  document.getElementById('ar_guests').value=r.guests||'';
+  document.getElementById('ar_price').value=r.price||'';
+  document.getElementById('addResvTitle').textContent='예약 수정';
+  document.getElementById('addResvSaveBtn').textContent='수정';
+  document.getElementById('addResvModal').classList.add('open');
+}
 function closeAddResvModal(){document.getElementById('addResvModal').classList.remove('open');}
 function submitAddResv(){
+  const id=document.getElementById('ar_id').value;
   const name=document.getElementById('ar_name').value.trim();
   const ci=document.getElementById('ar_checkin').value;
   const co=document.getElementById('ar_checkout').value;
   if(!name){toast('손님 이름을 입력하세요');return;}
   if(!ci||!co){toast('체크인/체크아웃 날짜를 선택하세요');return;}
   if(co<ci){toast('체크아웃은 체크인 이후여야 해요');return;}
-  const exists=reservations.find(r=>r.name===name&&r.checkin===ci&&r.checkout===co);
-  if(exists){toast('이미 같은 예약이 있어요');return;}
-  reservations.push({
-    id:'r'+Date.now(),name,
-    phone:document.getElementById('ar_phone').value,
-    checkin:ci,checkout:co,
-    guests:document.getElementById('ar_guests').value,
-    price:document.getElementById('ar_price').value,
-    createdAt:new Date().toISOString()
-  });
-  saveReservations();renderReservations();renderDashboard();
-  closeAddResvModal();
-  toast('예약이 추가됐어요 💾');
+  const dup=reservations.find(r=>r.id!==id&&r.name===name&&r.checkin===ci&&r.checkout===co);
+  if(dup){toast('이미 같은 예약이 있어요');return;}
+  if(id){
+    const r=reservations.find(x=>x.id===id);if(!r){closeAddResvModal();return;}
+    r.name=name;
+    r.phone=document.getElementById('ar_phone').value;
+    r.checkin=ci;r.checkout=co;
+    r.guests=document.getElementById('ar_guests').value;
+    r.price=document.getElementById('ar_price').value;
+    saveReservations();renderReservations();renderDashboard();
+    closeAddResvModal();
+    toast('예약이 수정됐어요 ✓');
+  } else {
+    reservations.push({
+      id:'r'+Date.now(),name,
+      phone:document.getElementById('ar_phone').value,
+      checkin:ci,checkout:co,
+      guests:document.getElementById('ar_guests').value,
+      price:document.getElementById('ar_price').value,
+      createdAt:new Date().toISOString()
+    });
+    saveReservations();renderReservations();renderDashboard();
+    closeAddResvModal();
+    toast('예약이 추가됐어요 💾');
+  }
 }
 
 // ─────── RESERVATIONS ───────
@@ -2865,7 +2900,10 @@ function renderReservations(){
         <div class="resv-card-date">📅 ${r.checkin} ~ ${r.checkout}</div>
         <div class="resv-card-extra">${r.guests?esc(r.guests):''}${r.phone?' · '+esc(r.phone):''}${r.price?' · '+esc(r.price):''}</div>
       </div>
-      <button class="resv-card-del" onclick="delReservation('${r.id}',event)">✕</button>
+      <div class="resv-card-actions">
+        <button class="resv-card-edit" onclick="editResv('${r.id}',event)" title="수정"><svg class="i"><use href="#i-pencil"/></svg></button>
+        <button class="resv-card-del" onclick="delReservation('${r.id}',event)" title="삭제">✕</button>
+      </div>
     </div>`;
   }).join('');
 }
