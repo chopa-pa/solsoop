@@ -1495,9 +1495,9 @@ input,select,textarea{font-family:inherit;}
         <h4><svg class="i"><use href="#i-house"/></svg>숙소 프로필 사용 방법</h4>
         <ul>
           <li><strong>숙소 정보</strong> — 이름·주소·계좌를 입력하면 <code>{숙소명}</code> <code>{숙소주소}</code> <code>{입금계좌}</code> 변수에 자동 반영됩니다.</li>
-          <li><strong>호실 관리</strong> — 호실마다 와이파이·도어락을 따로 저장. 다중 호실 운영에 편리합니다.</li>
+          <li><strong>호실 관리</strong> — 호실마다 와이파이·도어락·요금을 따로 저장. 다중 호실 운영에 편리합니다.</li>
           <li><strong>도어락 자동</strong> — <em>손님 전화번호 뒷자리 자동 사용</em>을 체크하면 게스트마다 도어락 비번이 자동 생성돼요.</li>
-          <li><strong>요금</strong> — 주중·주말 요금을 저장하면 <code>{주중요금}</code> <code>{주말요금}</code>에 반영.</li>
+          <li><strong>주중·주말 요금</strong> — 호실 카드에서 입력하면 <code>{주중요금}</code> <code>{주말요금}</code>에 선택된 호실 기준으로 반영됩니다.</li>
           <li><strong>내보내기 / 가져오기</strong> — 설정·템플릿·예약 전체를 JSON 파일로 백업·복원할 수 있어요.</li>
           <li><strong>홈 화면에 바로가기 추가</strong> — 모바일 브라우저에서 누르면 PWA 앱처럼 설치됩니다.</li>
         </ul>
@@ -1531,24 +1531,6 @@ input,select,textarea{font-family:inherit;}
           <p id="roomsCardHelp" style="font-size:12px;color:var(--muted-fg);margin-bottom:10px;">와이파이·도어락 정보를 입력해 주세요.</p>
           <div id="roomsList"></div>
           <button class="btn btn-outline btn-sm" style="width:100%;margin-top:10px;" onclick="addRoom()"><svg class="i"><use href="#i-plus"/></svg>호실 추가</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-dollar"/></svg></span>요금</div>
-        </div>
-        <div class="card-body">
-          <div class="form-grid">
-            <div class="fi">
-              <label>주중 요금 (월~목·일)</label>
-              <input class="input" type="text" id="cfg_pw" inputmode="numeric" placeholder="예: 100,000" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)">
-            </div>
-            <div class="fi">
-              <label>주말 요금 (금·토)</label>
-              <input class="input" type="text" id="cfg_pwe" inputmode="numeric" placeholder="예: 150,000" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)">
-            </div>
-          </div>
         </div>
       </div>
 
@@ -1764,7 +1746,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.1.7';
+const APP_VERSION='v2.1.8';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -1772,7 +1754,7 @@ const SK_LAST='stay_msg_lite1_last_tpl';
 const SK_HIST='stay_msg_lite1_hist_v1';
 const SK_ROOM='stay_msg_lite1_last_room';
 
-let settings={name:'',addr:'',account:'',rooms:[],pw:'',pwe:''};
+let settings={name:'',addr:'',account:'',rooms:[]};
 let customs={};
 let curTplKey=null;
 
@@ -1881,8 +1863,8 @@ function applyVars(raw){
     '{와이파이비번}':(getSelectedRoom()?.wifipw)||'{와이파이비번}',
     '{전화뒷자리}':(()=>{const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{전화뒷자리}';})(),
     '{도어락비번}':(()=>{const r=getSelectedRoom();if(r&&r.doorAuto){const p=document.getElementById('v_phone').value.replace(/\D/g,'');return p.length>=4?p.slice(-4):'{도어락비번}';}return (r?.door)||'{도어락비번}';})(),
-    '{주중요금}':fmtPriceVal(settings.pw)||'{주중요금}',
-    '{주말요금}':fmtPriceVal(settings.pwe)||'{주말요금}',
+    '{주중요금}':fmtPriceVal(getSelectedRoom()?.pw)||'{주중요금}',
+    '{주말요금}':fmtPriceVal(getSelectedRoom()?.pwe)||'{주말요금}',
   };
   return raw.replace(/\{[^}]+\}/g,m=>map[m]!==undefined?map[m]:m);
 }
@@ -2361,14 +2343,20 @@ function migrateSettings(){
   if(!settings.rooms.length){
     settings.rooms.push({id:'r'+Date.now(),name:settings.name||'',wifi:'',wifipw:'',door:'',doorAuto:false});
   }
+  if(settings.pw||settings.pwe){
+    settings.rooms.forEach(r=>{
+      if(!r.pw&&settings.pw)r.pw=settings.pw;
+      if(!r.pwe&&settings.pwe)r.pwe=settings.pwe;
+    });
+    delete settings.pw;delete settings.pwe;
+  }
+  settings.rooms.forEach(r=>{if(r.pw==null)r.pw='';if(r.pwe==null)r.pwe='';});
   localStorage.setItem(SK_SET,JSON.stringify(settings));
 }
 function fillSettingsFields(){
   document.getElementById('cfg_name').value=settings.name||'';
   document.getElementById('cfg_addr').value=settings.addr||'';
   document.getElementById('cfg_account').value=settings.account||'';
-  document.getElementById('cfg_pw').value=fmtPriceVal(settings.pw||'');
-  document.getElementById('cfg_pwe').value=fmtPriceVal(settings.pwe||'');
   renderRoomsList();
 }
 function saveSettings(){
@@ -2376,8 +2364,6 @@ function saveSettings(){
   settings.name=document.getElementById('cfg_name').value.trim();
   settings.addr=document.getElementById('cfg_addr').value.trim();
   settings.account=document.getElementById('cfg_account').value.trim();
-  settings.pw=document.getElementById('cfg_pw').value.trim();
-  settings.pwe=document.getElementById('cfg_pwe').value.trim();
   if(settings.rooms&&settings.rooms[0]){
     const r=settings.rooms[0];
     if(!r.name||r.name===prevName)r.name=settings.name;
@@ -2387,7 +2373,7 @@ function saveSettings(){
 }
 function confirmResetSettings(){
   showConfirmModal('설정 초기화','모든 설정이 삭제됩니다. 계속할까요?',()=>{
-    settings={name:'',addr:'',account:'',rooms:[],pw:'',pwe:''};
+    settings={name:'',addr:'',account:'',rooms:[]};
     localStorage.removeItem(SK_SET);
     migrateSettings();
     fillSettingsFields();
@@ -2419,6 +2405,10 @@ function renderRoomsList(){
           <input type="checkbox" id="ri_dauto_${r.id}" ${r.doorAuto?'checked':''} onchange="onRoomDoorAuto('${r.id}')">
           손님 전화번호 뒷자리 자동 사용
         </label>
+      </div>
+      <div class="form-grid" style="margin-top:10px;">
+        <div class="fi"><label>주중 요금 (월~목·일)</label><input class="input" type="text" id="ri_pw_${r.id}" inputmode="numeric" value="${esc(fmtPriceVal(r.pw||''))}" placeholder="예: 100,000" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)"></div>
+        <div class="fi"><label>주말 요금 (금·토)</label><input class="input" type="text" id="ri_pwe_${r.id}" inputmode="numeric" value="${esc(fmtPriceVal(r.pwe||''))}" placeholder="예: 150,000" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)"></div>
       </div>
       <div style="margin-top:10px;">
         <button class="btn btn-primary btn-sm" style="width:100%;" onclick="saveRoomSingle('${r.id}')"><svg class="i"><use href="#i-save"/></svg>저장</button>
@@ -2452,6 +2442,10 @@ function renderRoomsList(){
             손님 전화번호 뒷자리 자동 사용
           </label>
         </div>
+        <div class="form-grid" style="margin-top:10px;">
+          <div class="fi"><label>주중 요금 (월~목·일)</label><input class="input" type="text" id="ri_pw_${r.id}" inputmode="numeric" value="${esc(fmtPriceVal(r.pw||''))}" placeholder="예: 100,000" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)"></div>
+          <div class="fi"><label>주말 요금 (금·토)</label><input class="input" type="text" id="ri_pwe_${r.id}" inputmode="numeric" value="${esc(fmtPriceVal(r.pwe||''))}" placeholder="예: 150,000" onfocus="this.value=this.value.replace(/[^0-9]/g,'')" onblur="fmtPrice(this)"></div>
+        </div>
         <div class="btn-row-2" style="margin-top:10px;">
           <button class="btn btn-destructive btn-sm" onclick="deleteRoom('${r.id}')"><svg class="i"><use href="#i-trash"/></svg>삭제</button>
           <button class="btn btn-primary btn-sm" onclick="saveRoom('${r.id}')"><svg class="i"><use href="#i-save"/></svg>저장</button>
@@ -2466,6 +2460,8 @@ function saveRoomSingle(id){
   r.wifipw=document.getElementById('ri_wifipw_'+id).value.trim();
   r.door=document.getElementById('ri_door_'+id).value.trim();
   r.doorAuto=document.getElementById('ri_dauto_'+id).checked;
+  r.pw=document.getElementById('ri_pw_'+id).value.trim();
+  r.pwe=document.getElementById('ri_pwe_'+id).value.trim();
   r.name=settings.name||r.name||'호실1';
   localStorage.setItem(SK_SET,JSON.stringify(settings));
   buildRoomSelect();renderPreview();
@@ -2486,11 +2482,15 @@ function addRoom(){
       r0.wifipw=document.getElementById('ri_wifipw_'+r0.id).value.trim();
       r0.door=document.getElementById('ri_door_'+r0.id).value.trim();
       r0.doorAuto=document.getElementById('ri_dauto_'+r0.id).checked;
+      const pwEl=document.getElementById('ri_pw_'+r0.id);
+      const pweEl=document.getElementById('ri_pwe_'+r0.id);
+      if(pwEl)r0.pw=pwEl.value.trim();
+      if(pweEl)r0.pwe=pweEl.value.trim();
       r0.name=settings.name||r0.name||'호실1';
     }
   }
   const n=settings.rooms.length+1;
-  const r={id:'r'+Date.now(),name:settings.name?settings.name+' '+n+'호':'호실'+n,wifi:'',wifipw:'',door:'',doorAuto:false};
+  const r={id:'r'+Date.now(),name:settings.name?settings.name+' '+n+'호':'호실'+n,wifi:'',wifipw:'',door:'',doorAuto:false,pw:'',pwe:''};
   settings.rooms.push(r);
   localStorage.setItem(SK_SET,JSON.stringify(settings));
   editingRoomId=r.id;
@@ -2504,6 +2504,8 @@ function saveRoom(id){
   r.wifipw=document.getElementById('ri_wifipw_'+id).value.trim();
   r.door=document.getElementById('ri_door_'+id).value.trim();
   r.doorAuto=document.getElementById('ri_dauto_'+id).checked;
+  r.pw=document.getElementById('ri_pw_'+id).value.trim();
+  r.pwe=document.getElementById('ri_pwe_'+id).value.trim();
   localStorage.setItem(SK_SET,JSON.stringify(settings));
   editingRoomId=null;
   renderRoomsList();buildRoomSelect();renderPreview();
