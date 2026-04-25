@@ -1347,7 +1347,8 @@ input,select,textarea{font-family:inherit;}
               <div class="form-grid">
                 <div class="fi">
                   <label><span class="req">*</span>이름</label>
-                  <input class="input" type="text" id="v_name" placeholder="홍길동" oninput="renderPreview()" onkeydown="if(event.key==='Enter')document.getElementById('v_phone').focus()" autocomplete="off">
+                  <input class="input" type="text" id="v_name" placeholder="홍길동" list="nameSuggest" oninput="onNameInput(this)" onkeydown="if(event.key==='Enter')document.getElementById('v_phone').focus()" autocomplete="off">
+                  <datalist id="nameSuggest"></datalist>
                 </div>
                 <div class="fi">
                   <label>연락처</label>
@@ -1721,7 +1722,8 @@ input,select,textarea{font-family:inherit;}
     <div class="form-grid">
       <div class="fi">
         <label><span class="req">*</span>손님 이름</label>
-        <input class="input" type="text" id="ar_name" placeholder="홍길동" autocomplete="off">
+        <input class="input" type="text" id="ar_name" placeholder="홍길동" list="arNameSuggest" oninput="onArNameInput(this)" autocomplete="off">
+        <datalist id="arNameSuggest"></datalist>
       </div>
       <div class="fi">
         <label>전화번호</label>
@@ -1765,7 +1767,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.3.0';
+const APP_VERSION='v2.3.1';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -2803,7 +2805,38 @@ function submitAddResv(){
 // ─────── RESERVATIONS ───────
 let reservations=[];
 function loadReservations(){try{reservations=JSON.parse(localStorage.getItem(SK_RES)||'[]');}catch{reservations=[];}}
-function saveReservations(){localStorage.setItem(SK_RES,JSON.stringify(reservations));}
+function saveReservations(){localStorage.setItem(SK_RES,JSON.stringify(reservations));buildNameSuggest();}
+function buildNameSuggest(){
+  const seen=new Set();
+  const names=[];
+  reservations.forEach(r=>{if(r.name&&!seen.has(r.name)){seen.add(r.name);names.push(r.name);}});
+  names.sort((a,b)=>a.localeCompare(b,'ko'));
+  const opts=names.map(n=>`<option value="${esc(n)}">`).join('');
+  ['nameSuggest','arNameSuggest'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.innerHTML=opts;
+  });
+}
+function findReservationByName(name){
+  if(!name)return null;
+  const matches=reservations.filter(r=>r.name===name);
+  if(!matches.length)return null;
+  return matches.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''))[0];
+}
+function onNameInput(el){
+  const r=findReservationByName(el.value.trim());
+  if(r){
+    const ph=document.getElementById('v_phone');
+    if(ph&&!ph.value&&r.phone){ph.value=r.phone;}
+  }
+  renderPreview();
+}
+function onArNameInput(el){
+  const r=findReservationByName(el.value.trim());
+  if(r){
+    const ph=document.getElementById('ar_phone');
+    if(ph&&!ph.value&&r.phone){ph.value=r.phone;}
+  }
+}
 const ROOM_COLORS=[
   {bg:'#10b981',light:'#a7f3d0',fg:'#065f46'},
   {bg:'#3b82f6',light:'#bfdbfe',fg:'#1e40af'},
@@ -3086,7 +3119,7 @@ document.addEventListener('keydown',e=>{
 });
 
 ['appVer','appVerM'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=APP_VERSION;});
-loadAll();loadReservations();loadHistory();fillSettingsFields();buildRoomSelect();buildTplSelect();renderPreview();renderDashboard();
+loadAll();loadReservations();loadHistory();fillSettingsFields();buildRoomSelect();buildTplSelect();renderPreview();renderDashboard();buildNameSuggest();
 document.getElementById('guideVarChips').innerHTML=VAR_LIST.map(v=>`<span class="var-chip" style="cursor:default;" onmouseenter="this.dataset.preview=varPreview('${v}')">${v}</span>`).join('');
 
 if('serviceWorker' in navigator){
