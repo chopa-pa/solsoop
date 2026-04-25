@@ -1421,12 +1421,9 @@ input,select,textarea{font-family:inherit;}
           </div>
 
           <div class="action-bar">
+            <button class="btn btn-outline" onclick="editCurTplInManagement()" title="현재 템플릿 편집"><svg class="i"><use href="#i-pencil"/></svg>템플릿 편집</button>
             <button class="btn btn-outline" onclick="copyMessage()"><svg class="i"><use href="#i-copy"/></svg>텍스트 복사</button>
             <button class="btn btn-primary" onclick="openSmsApp()"><svg class="i"><use href="#i-iphone"/></svg>문자 앱 열기</button>
-          </div>
-
-          <div style="margin-top:10px;">
-            <button class="btn btn-outline btn-sm" style="width:100%;" onclick="editCurTplInManagement()"><svg class="i"><use href="#i-pencil"/></svg>현재 템플릿 편집 →</button>
           </div>
         </div>
       </div>
@@ -1760,7 +1757,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.2.2';
+const APP_VERSION='v2.2.3';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
