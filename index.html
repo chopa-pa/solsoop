@@ -351,9 +351,6 @@ input,select,textarea{font-family:inherit;}
 .btn-row-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 
 /* ─────── DASHBOARD LAYOUT ─────── */
-.dash-grid{display:grid;grid-template-columns:1fr;gap:16px;}
-.dash-grid > .card + .card{margin-top:0;}
-@media(min-width:1024px){.dash-grid{grid-template-columns:1fr 1fr;gap:20px;align-items:start;}}
 
 /* ─────── COMPOSE LAYOUT ─────── */
 .compose-grid{display:grid;grid-template-columns:1fr;gap:16px;}
@@ -490,37 +487,113 @@ input,select,textarea{font-family:inherit;}
 }
 
 /* ─────── DASHBOARD ─────── */
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  margin-bottom:20px;
+.dash-head{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:12px;margin-bottom:18px;flex-wrap:wrap;
 }
-@media(min-width:768px){.stats-grid{grid-template-columns:repeat(4,1fr);}}
-.stat{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:18px 18px 16px;
-  position:relative;
-  text-align:left;
-  font:inherit;color:inherit;
-  cursor:pointer;
-  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+.dash-head-text{min-width:0;flex:1;}
+.dash-greet{
+  font-size:24px;font-weight:800;letter-spacing:-0.02em;
+  color:var(--fg);line-height:1.2;margin:0 0 6px;
 }
-.stat:hover{transform:translateY(-2px);box-shadow:0 6px 16px -8px rgba(0,0,0,.15);border-color:var(--primary);}
-.stat:active{transform:translateY(0);}
-.stat-ico{
-  width:36px;height:36px;border-radius:var(--radius);
-  background:var(--accent);color:var(--accent-fg);
+.dash-sub{font-size:13px;color:var(--muted-fg);margin:0;}
+.dash-head-cta{flex-shrink:0;}
+@media(max-width:640px){
+  .dash-greet{font-size:20px;}
+  .dash-sub{font-size:12px;}
+  .dash-head-cta{padding:8px 12px;font-size:13px;}
+}
+
+.stat-chips{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;
+}
+@media(min-width:640px){.stat-chips{grid-template-columns:repeat(4,1fr);gap:10px;}}
+.stat-chip{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;border:1px solid var(--border);background:var(--card);
+  border-radius:999px;cursor:pointer;font:inherit;color:inherit;
+  transition:border-color .15s,box-shadow .15s,transform .12s;
+  min-width:0;
+}
+.stat-chip:hover{border-color:var(--primary);box-shadow:0 4px 10px -6px rgba(0,0,0,.12);}
+.stat-chip:active{transform:translateY(1px);}
+.sc-ico{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:16px;margin-bottom:10px;
+  background:var(--accent);color:var(--accent-fg);
 }
-.stat-ico.warn{background:var(--warning-bg);color:var(--warning);}
-.stat-ico.blue{background:#dbeafe;color:#1d4ed8;}
-.stat-ico.purple{background:#ede9fe;color:#6d28d9;}
-.stat-num{font-size:24px;font-weight:800;color:var(--fg);line-height:1;}
-.stat-lbl{font-size:12px;color:var(--muted-fg);margin-top:4px;}
+.sc-ico .i{width:14px;height:14px;}
+.stat-chip.warn .sc-ico{background:var(--warning-bg);color:var(--warning);}
+.stat-chip.blue .sc-ico{background:#dbeafe;color:#1d4ed8;}
+.stat-chip.purple .sc-ico{background:#ede9fe;color:#6d28d9;}
+.sc-lbl{font-size:12px;color:var(--muted-fg);font-weight:600;}
+.sc-num{margin-left:auto;font-size:16px;font-weight:800;color:var(--fg);}
+
+/* Dashboard month calendar */
+.cal-card{padding:16px;}
+.cal-page-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:12px;flex-wrap:wrap;
+}
+.cal-page-title{
+  background:none;border:none;font:inherit;cursor:pointer;
+  font-size:18px;font-weight:800;color:var(--fg);padding:4px 8px;border-radius:8px;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.cal-page-title:hover{background:var(--accent-soft);}
+.cal-page-title::after{content:'▾';font-size:11px;color:var(--muted-fg);}
+.cal-page-nav{display:flex;gap:6px;}
+.cal-page-nav .btn{padding:6px 10px;font-size:12px;}
+.month-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  background:var(--border);border-radius:10px;overflow:hidden;
+  border:1px solid var(--border);
+}
+.month-dow{
+  text-align:center;padding:8px 2px;font-size:11px;font-weight:700;
+  color:var(--muted-fg);background:var(--muted);
+}
+.month-dow:first-child{color:var(--destructive);}
+.month-dow:last-child{color:#2563eb;}
+.month-day{
+  min-height:74px;background:var(--card);padding:4px 3px 3px;
+  position:relative;cursor:pointer;transition:background .12s;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.month-day:hover{background:var(--accent-soft);}
+.month-day.other-month{background:#fafafa;}
+.month-day.other-month .md-num{color:var(--border-strong);}
+.month-day.today .md-num-inner{
+  background:var(--primary);color:white;border-radius:50%;
+  width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin:0 auto;
+}
+.month-day.selected{background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--primary);}
+.md-num{font-size:11px;font-weight:600;text-align:center;margin-bottom:3px;color:var(--fg);}
+.md-num-inner{line-height:22px;display:inline-block;}
+.md-num small{display:block;font-size:8px;line-height:1;margin-top:1px;font-weight:600;}
+.month-day.sun .md-num{color:var(--destructive);}
+.month-day.sat .md-num{color:#2563eb;}
+.month-day.holiday .md-num{color:var(--destructive);}
+.month-day.today.sun .md-num-inner,.month-day.today.sat .md-num-inner,.month-day.today.holiday .md-num-inner{color:white;}
+.res-chip{
+  display:block;width:100%;box-sizing:border-box;
+  font-size:9px;font-weight:700;padding:2px 4px;border-radius:4px;
+  color:white;margin-bottom:2px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;line-height:13px;min-height:17px;
+}
+.res-chip.ci-day{background:#10b981;border-radius:6px 2px 2px 6px;}
+.res-chip.co-day{background:#f97316;border-radius:2px 6px 6px 2px;}
+.res-chip.mid-day{background:#a7f3d0;color:#065f46;border-radius:0;}
+.res-more{font-size:8px;color:var(--muted-fg);text-align:center;font-weight:600;}
+@media(max-width:640px){
+  .cal-card{padding:12px;}
+  .cal-page-title{font-size:16px;}
+  .month-day{min-height:56px;padding:3px 2px;}
+  .month-dow{padding:6px 0;font-size:10px;}
+  .md-num{font-size:10px;}
+  .md-num small{display:none;}
+  .res-chip{font-size:8px;padding:1px 2px;line-height:11px;min-height:14px;}
+}
 
 /* Res list */
 .res-list{display:flex;flex-direction:column;}
@@ -1017,339 +1090,58 @@ input,select,textarea{font-family:inherit;}
     <!-- ─── HOME ─── -->
     <section class="page active" id="tab-home">
 
-      <div class="hero">
-        <!-- Misty mountain valley illustration (based on 솔숲 view) -->
-        <svg class="hero-bg" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="hbSky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-            </linearGradient>
-            <linearGradient id="hbMist" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.1"/>
-            </linearGradient>
-            <pattern id="hdot" width="14" height="14" patternUnits="userSpaceOnUse">
-              <circle cx="2" cy="2" r="0.9" fill="white" opacity="0.08"/>
-            </pattern>
-          </defs>
-
-          <!-- Ambient dots + sky wash -->
-          <rect width="600" height="200" fill="url(#hdot)"/>
-          <rect width="600" height="120" fill="url(#hbSky)"/>
-
-          <!-- Far mountains (palest, receding) -->
-          <path d="M 0 110 Q 70 78 140 95 T 280 82 Q 360 98 430 78 T 600 95 L 600 140 L 0 140 Z"
-                fill="#052e2a" opacity="0.18"/>
-
-          <!-- Low mist band 1 (between far and mid) -->
-          <path d="M 0 108 Q 120 100 260 106 T 520 104 Q 580 102 600 106 L 600 118 Q 500 114 380 118 T 140 116 Q 60 118 0 116 Z"
-                fill="url(#hbMist)" opacity="0.7"/>
-
-          <!-- Mid mountains (with subtle peaks) -->
-          <path d="M 0 135 Q 60 108 110 122 Q 170 88 240 115 Q 310 92 380 118 Q 450 98 510 120 Q 560 110 600 126 L 600 170 L 0 170 Z"
-                fill="#05322d" opacity="0.32"/>
-
-          <!-- Thick rolling fog in valley -->
-          <g opacity="0.85">
-            <path d="M 0 140 Q 80 128 160 138 Q 240 130 320 142 Q 400 134 480 144 Q 540 138 600 146 L 600 168 Q 520 158 420 162 Q 320 168 220 160 Q 120 166 0 160 Z"
-                  fill="#ffffff" opacity="0.55"/>
-            <path d="M 40 152 Q 140 144 260 154 Q 380 148 500 156 Q 560 152 600 156 L 600 170 Q 500 162 380 166 Q 260 170 140 164 Q 80 170 40 166 Z"
-                  fill="#ffffff" opacity="0.4"/>
-          </g>
-
-          <!-- Near mountains (darkest, with tree texture) -->
-          <path d="M 0 200 L 0 150 Q 50 135 100 145 Q 160 120 220 138 Q 290 112 350 135 Q 420 115 470 138 Q 530 125 600 140 L 600 200 Z"
-                fill="#04231f" opacity="0.48"/>
-
-          <!-- Pine ridge silhouettes on near mountain -->
-          <g fill="#04231f" opacity="0.62">
-            <polygon points="60,148 53,165 67,165"/>
-            <polygon points="60,140 55,152 65,152"/>
-            <polygon points="120,160 113,178 127,178"/>
-            <polygon points="120,153 115,165 125,165"/>
-            <polygon points="210,148 203,168 217,168"/>
-            <polygon points="340,150 333,170 347,170"/>
-            <polygon points="340,142 335,155 345,155"/>
-            <polygon points="420,158 413,178 427,178"/>
-          </g>
-
-          <!-- Cabin (bottom-right, pointed roof like photo) -->
-          <g opacity="0.85">
-            <!-- Roof -->
-            <polygon points="498,172 522,152 546,172" fill="#0b1917"/>
-            <polygon points="522,152 546,172 558,172 534,152" fill="#05100e"/>
-            <!-- Body -->
-            <rect x="504" y="172" width="42" height="20" fill="#1a1410"/>
-            <!-- Tiny window -->
-            <rect x="528" y="178" width="6" height="6" fill="#fef3c7" opacity="0.8"/>
-          </g>
-
-          <!-- Tree branch (right edge, overhanging) -->
-          <g opacity="0.7" fill="none" stroke="#0a1f1b" stroke-linecap="round">
-            <!-- Trunk fragment -->
-            <path d="M 590 0 Q 585 40 582 80 Q 580 120 585 170" stroke-width="3"/>
-            <!-- Major branches reaching inward -->
-            <path d="M 582 30 Q 560 25 530 28" stroke-width="1.5"/>
-            <path d="M 582 60 Q 550 58 510 64" stroke-width="1.3"/>
-            <path d="M 583 90 Q 555 92 525 100" stroke-width="1.2"/>
-            <path d="M 584 130 Q 560 135 535 142" stroke-width="1"/>
-            <!-- Smaller twigs -->
-            <path d="M 560 25 Q 555 16 552 10" stroke-width="0.8"/>
-            <path d="M 560 25 Q 560 34 562 42" stroke-width="0.8"/>
-            <path d="M 540 62 Q 538 52 535 44" stroke-width="0.7"/>
-            <path d="M 540 62 Q 538 72 540 80" stroke-width="0.7"/>
-            <path d="M 525 100 Q 520 92 515 85" stroke-width="0.7"/>
-          </g>
-          <!-- Leaf clusters on branches -->
-          <g fill="#86efac" opacity="0.55">
-            <ellipse cx="545" cy="28" rx="6" ry="4"/>
-            <ellipse cx="528" cy="26" rx="5" ry="3.5"/>
-            <ellipse cx="553" cy="8" rx="4" ry="3"/>
-            <ellipse cx="522" cy="62" rx="6" ry="4"/>
-            <ellipse cx="538" cy="42" rx="4" ry="3"/>
-            <ellipse cx="510" cy="66" rx="4" ry="3"/>
-            <ellipse cx="535" cy="100" rx="5" ry="3.5"/>
-            <ellipse cx="520" cy="90" rx="4" ry="3"/>
-            <ellipse cx="545" cy="140" rx="4" ry="3"/>
-          </g>
-
-          <!-- Large foreground pine (bottom-left, framing) -->
-          <g opacity="0.7">
-            <ellipse cx="20" cy="190" rx="35" ry="22" fill="#04231f"/>
-            <ellipse cx="35" cy="180" rx="28" ry="20" fill="#052e2a"/>
-            <ellipse cx="10" cy="175" rx="22" ry="16" fill="#052e2a"/>
-          </g>
-        </svg>
-
-        <!-- Mobile: Korean pine + mountain valley scene -->
-        <div class="hero-art hero-art-mobile">
-          <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- Soft sun halo -->
-            <circle cx="95" cy="55" r="34" fill="white" opacity="0.16"/>
-            <circle cx="95" cy="55" r="20" fill="white" opacity="0.22"/>
-            <!-- Wispy clouds -->
-            <g fill="white" opacity="0.32">
-              <ellipse cx="60" cy="28" rx="30" ry="2.5"/>
-              <ellipse cx="70" cy="36" rx="22" ry="2"/>
-              <ellipse cx="42" cy="42" rx="18" ry="1.8"/>
-              <ellipse cx="170" cy="32" rx="24" ry="2"/>
-            </g>
-            <!-- Far mountain ridge -->
-            <path d="M 0 128 L 28 108 L 60 120 L 95 102 L 130 116 L 165 104 L 200 118 L 235 106 L 270 120 L 305 112 L 340 122 L 340 200 L 0 200 Z"
-              fill="#04231c" opacity="0.45"/>
-            <!-- Mid mountain ridge -->
-            <path d="M 0 152 L 38 130 L 78 148 L 120 122 L 160 142 L 205 128 L 248 144 L 292 132 L 340 142 L 340 200 L 0 200 Z"
-              fill="#031812" opacity="0.65"/>
-            <!-- Near hills -->
-            <path d="M 0 178 L 48 168 L 105 176 L 165 162 L 225 172 L 285 165 L 340 170 L 340 200 L 0 200 Z"
-              fill="#010c08" opacity="0.85"/>
-            <!-- Tiny cabin silhouette nestled in hills -->
-            <g transform="translate(118,158)" opacity="0.9">
-              <rect x="0" y="4" width="16" height="9" fill="#0a0805"/>
-              <polygon points="-1,4 8,-1 17,4" fill="#05040a"/>
-              <rect x="6" y="8" width="2.5" height="5" fill="#1a100a"/>
-            </g>
-
-            <!-- Korean pine (소나무) sprawling from right -->
-            <!-- Trunk: twisted, leaning pattern -->
-            <path d="M 318 200 C 313 178, 322 158, 312 140 C 302 122, 316 104, 306 85 C 298 68, 310 50, 300 34"
-              stroke="#2b1608" stroke-width="7.5" fill="none" stroke-linecap="round"/>
-            <!-- Trunk bark highlight -->
-            <path d="M 316 190 C 312 172, 319 155, 311 140 C 304 125, 314 108, 306 90 C 300 75, 308 58, 301 40"
-              stroke="#5c3a22" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.8"/>
-            <!-- Upper branch -->
-            <path d="M 304 62 C 286 60, 265 65, 248 70" stroke="#2b1608" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <!-- Main sprawling mid branch (signature Korean pine) -->
-            <path d="M 308 95 C 278 92, 242 97, 205 105 C 180 110, 158 116, 142 122"
-              stroke="#2b1608" stroke-width="4" fill="none" stroke-linecap="round"/>
-            <!-- Secondary lower branch -->
-            <path d="M 312 128 C 288 131, 255 140, 222 152" stroke="#2b1608" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-            <!-- Small twigs -->
-            <path d="M 255 82 L 240 75 M 230 88 L 220 82" stroke="#2b1608" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M 195 108 L 182 102 M 170 114 L 158 108" stroke="#2b1608" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-
-            <!-- Foliage: dark base clusters -->
-            <g fill="#031a12">
-              <ellipse cx="298" cy="28" rx="22" ry="9"/>
-              <ellipse cx="278" cy="36" rx="17" ry="7"/>
-              <ellipse cx="258" cy="62" rx="22" ry="9"/>
-              <ellipse cx="235" cy="72" rx="18" ry="8"/>
-              <ellipse cx="278" cy="92" rx="24" ry="10"/>
-              <ellipse cx="240" cy="100" rx="26" ry="10"/>
-              <ellipse cx="200" cy="108" rx="22" ry="9"/>
-              <ellipse cx="162" cy="118" rx="20" ry="8"/>
-              <ellipse cx="262" cy="125" rx="22" ry="9"/>
-              <ellipse cx="228" cy="142" rx="20" ry="8"/>
-              <ellipse cx="200" cy="152" rx="16" ry="7"/>
-            </g>
-            <!-- Foliage: mid-green -->
-            <g fill="#065f46" opacity="0.78">
-              <ellipse cx="294" cy="24" rx="16" ry="5"/>
-              <ellipse cx="260" cy="58" rx="16" ry="5"/>
-              <ellipse cx="276" cy="87" rx="18" ry="5"/>
-              <ellipse cx="237" cy="95" rx="20" ry="5"/>
-              <ellipse cx="198" cy="103" rx="16" ry="5"/>
-              <ellipse cx="259" cy="120" rx="16" ry="5"/>
-              <ellipse cx="225" cy="137" rx="15" ry="4"/>
-            </g>
-            <!-- Foliage: bright highlights -->
-            <g fill="#10b981" opacity="0.5">
-              <ellipse cx="292" cy="21" rx="10" ry="2.5"/>
-              <ellipse cx="258" cy="55" rx="10" ry="2"/>
-              <ellipse cx="272" cy="84" rx="12" ry="2.5"/>
-              <ellipse cx="232" cy="92" rx="14" ry="2.5"/>
-              <ellipse cx="195" cy="100" rx="10" ry="2"/>
-              <ellipse cx="255" cy="117" rx="10" ry="2"/>
-            </g>
-          </svg>
+      <div class="dash-head">
+        <div class="dash-head-text">
+          <h1 class="dash-greet">안녕하세요, <span id="dashGreetName">호스트</span></h1>
+          <p class="dash-sub" id="dashSubInfo">오늘 일정을 확인하세요</p>
         </div>
-
-        <!-- Desktop: Clean message-bubbles composition -->
-        <div class="hero-art hero-art-desktop">
-          <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="phScreen" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ecfdf5"/>
-                <stop offset="100%" stop-color="#ffffff"/>
-              </linearGradient>
-              <linearGradient id="bblMe" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="100%" stop-color="#f0fdf4"/>
-              </linearGradient>
-              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3"/>
-              </filter>
-            </defs>
-
-            <!-- Decorative halo behind phone -->
-            <circle cx="220" cy="100" r="88" fill="white" opacity="0.10"/>
-            <circle cx="220" cy="100" r="64" fill="white" opacity="0.08"/>
-
-            <!-- Phone (tilted) -->
-            <g transform="translate(220,100) rotate(-10) translate(-55,-95)">
-              <!-- Shadow -->
-              <rect x="6" y="10" width="110" height="190" rx="22" fill="#000" opacity="0.18" filter="url(#softShadow)"/>
-              <!-- Frame -->
-              <rect x="0" y="0" width="110" height="190" rx="22" fill="#0f172a"/>
-              <rect x="4" y="4" width="102" height="182" rx="19" fill="#1e293b"/>
-              <!-- Screen -->
-              <rect x="6" y="6" width="98" height="178" rx="17" fill="url(#phScreen)"/>
-              <!-- Notch -->
-              <rect x="40" y="6" width="30" height="7" rx="3.5" fill="#0f172a"/>
-              <!-- Header -->
-              <rect x="14" y="22" width="44" height="6" rx="3" fill="#10b981"/>
-              <rect x="14" y="32" width="30" height="4" rx="2" fill="#cbd5e1"/>
-              <!-- Divider -->
-              <line x1="10" y1="44" x2="100" y2="44" stroke="#e2e8f0" stroke-width="1"/>
-
-              <!-- Incoming bubble -->
-              <g>
-                <rect x="14" y="54" width="60" height="22" rx="11" fill="#e2e8f0"/>
-                <rect x="20" y="62" width="36" height="3" rx="1.5" fill="#94a3b8"/>
-                <rect x="20" y="68" width="24" height="3" rx="1.5" fill="#94a3b8"/>
-              </g>
-
-              <!-- Outgoing bubble -->
-              <g>
-                <rect x="36" y="84" width="62" height="24" rx="12" fill="#10b981"/>
-                <rect x="44" y="92" width="36" height="3" rx="1.5" fill="white" opacity="0.9"/>
-                <rect x="44" y="98" width="46" height="3" rx="1.5" fill="white" opacity="0.9"/>
-              </g>
-
-              <!-- Incoming bubble 2 -->
-              <g>
-                <rect x="14" y="116" width="50" height="22" rx="11" fill="#e2e8f0"/>
-                <rect x="20" y="124" width="30" height="3" rx="1.5" fill="#94a3b8"/>
-                <rect x="20" y="130" width="22" height="3" rx="1.5" fill="#94a3b8"/>
-              </g>
-
-              <!-- Typing -->
-              <g transform="translate(36,148)">
-                <rect x="0" y="0" width="36" height="16" rx="8" fill="#10b981"/>
-                <circle cx="10" cy="8" r="2" fill="white"/>
-                <circle cx="18" cy="8" r="2" fill="white" opacity="0.7"/>
-                <circle cx="26" cy="8" r="2" fill="white" opacity="0.45"/>
-              </g>
-
-              <!-- Home indicator -->
-              <rect x="38" y="176" width="34" height="3" rx="1.5" fill="#cbd5e1"/>
-            </g>
-
-            <!-- Floating bubble 1 (top, left of phone) -->
-            <g transform="translate(118,26)">
-              <rect x="0" y="0" width="86" height="36" rx="18" fill="url(#bblMe)" opacity="0.98"/>
-              <polygon points="60,32 68,44 52,34" fill="url(#bblMe)" opacity="0.98"/>
-              <circle cx="16" cy="18" r="5" fill="#10b981"/>
-              <rect x="28" y="12" width="46" height="4" rx="2" fill="#065f46" opacity="0.7"/>
-              <rect x="28" y="20" width="34" height="3" rx="1.5" fill="#10b981" opacity="0.55"/>
-            </g>
-
-            <!-- Floating bubble 2 (bottom-left of phone) -->
-            <g transform="translate(100,140)">
-              <rect x="0" y="0" width="70" height="30" rx="15" fill="white" opacity="0.95"/>
-              <polygon points="52,26 60,36 44,28" fill="white" opacity="0.95"/>
-              <rect x="10" y="10" width="34" height="4" rx="2" fill="#10b981" opacity="0.7"/>
-              <rect x="10" y="18" width="24" height="3" rx="1.5" fill="#94a3b8"/>
-            </g>
-
-            <!-- Sparkles -->
-            <g fill="#ffffff" opacity="0.85">
-              <path d="M168 14 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z"/>
-              <path d="M306 56 l1.4 4 4 1.4 -4 1.4 -1.4 4 -1.4 -4 -4 -1.4 4 -1.4 z"/>
-              <path d="M190 176 l1.2 3.5 3.5 1.2 -3.5 1.2 -1.2 3.5 -1.2 -3.5 -3.5 -1.2 3.5 -1.2 z"/>
-            </g>
-          </svg>
-        </div>
-
-        <div class="hero-content">
-          <span class="hero-eyebrow"><svg class="i"><use href="#i-hand"/></svg>환영합니다</span>
-          <h1 class="hero-title">Stay_Msg<br>예약 문자를 빠르게 💬</h1>
-          <p class="hero-sub">템플릿 + 게스트 정보만 있으면 정성 담긴 문자가 자동 완성됩니다.</p>
-          <button type="button" class="hero-cta" onclick="switchTab('compose')"><svg class="i"><use href="#i-pencil"/></svg>새 문자 작성</button>
-        </div>
+        <button class="btn btn-primary dash-head-cta" onclick="switchTab('compose')"><svg class="i"><use href="#i-pencil"/></svg>새 문자</button>
       </div>
 
-      <div class="stats-grid">
-        <button type="button" class="stat" onclick="switchTab('reserv')">
-          <div class="stat-ico"><svg class="i"><use href="#i-login"/></svg></div>
-          <div class="stat-num" id="dashCiNum">0</div>
-          <div class="stat-lbl">오늘 체크인</div>
+      <div class="stat-chips">
+        <button class="stat-chip" onclick="switchTab('reserv')">
+          <span class="sc-ico"><svg class="i"><use href="#i-login"/></svg></span>
+          <span class="sc-lbl">체크인</span>
+          <span class="sc-num" id="dashCiNum">0</span>
         </button>
-        <button type="button" class="stat" onclick="switchTab('reserv')">
-          <div class="stat-ico warn"><svg class="i"><use href="#i-logout"/></svg></div>
-          <div class="stat-num" id="dashCoNum">0</div>
-          <div class="stat-lbl">오늘 체크아웃</div>
+        <button class="stat-chip warn" onclick="switchTab('reserv')">
+          <span class="sc-ico"><svg class="i"><use href="#i-logout"/></svg></span>
+          <span class="sc-lbl">체크아웃</span>
+          <span class="sc-num" id="dashCoNum">0</span>
         </button>
-        <button type="button" class="stat" onclick="switchTab('reserv')">
-          <div class="stat-ico blue"><svg class="i"><use href="#i-calendar"/></svg></div>
-          <div class="stat-num" id="dashUpNum">0</div>
-          <div class="stat-lbl">7일 이내 예약</div>
+        <button class="stat-chip blue" onclick="switchTab('reserv')">
+          <span class="sc-ico"><svg class="i"><use href="#i-calendar"/></svg></span>
+          <span class="sc-lbl">7일</span>
+          <span class="sc-num" id="dashUpNum">0</span>
         </button>
-        <button type="button" class="stat" onclick="switchTab('reserv')">
-          <div class="stat-ico purple"><svg class="i"><use href="#i-chart"/></svg></div>
-          <div class="stat-num" id="dashTotalNum">0</div>
-          <div class="stat-lbl">저장된 예약</div>
+        <button class="stat-chip purple" onclick="switchTab('reserv')">
+          <span class="sc-ico"><svg class="i"><use href="#i-chart"/></svg></span>
+          <span class="sc-lbl">총 예약</span>
+          <span class="sc-num" id="dashTotalNum">0</span>
         </button>
       </div>
 
-      <div class="dash-grid">
-        <div class="card">
-          <div class="card-head">
-            <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-pin"/></svg></span>오늘 일정 <span id="dashDate" style="margin-left:auto;font-weight:500;color:var(--muted-fg);font-size:12px;"></span></div>
+      <div class="card cal-card">
+        <div class="cal-page-head">
+          <button class="cal-page-title" id="dashCalLabel" onclick="dashCalYmToggle()">2026년 4월</button>
+          <div class="cal-page-nav">
+            <button class="btn btn-outline btn-sm" onclick="dashCalNav(-1)">‹ 이전</button>
+            <button class="btn btn-primary btn-sm" onclick="dashCalToday()">오늘</button>
+            <button class="btn btn-outline btn-sm" onclick="dashCalNav(1)">다음 ›</button>
           </div>
-          <div class="res-list" id="dashList"></div>
         </div>
+        <div id="dashCalBody"></div>
+      </div>
 
-        <div class="card" id="recentSendsCard">
-          <div class="card-head">
-            <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-clock"/></svg></span>최근 발송<span id="recentSendsMore" style="margin-left:auto;font-size:12px;font-weight:500;color:var(--muted-fg);cursor:pointer;" onclick="goToHistory()">전체 보기 →</span></div>
-          </div>
-          <div class="res-list" id="dashRecentHist"></div>
+      <div class="card" id="recentSendsCard">
+        <div class="card-head">
+          <div class="card-head-title"><span class="ico"><svg class="i"><use href="#i-clock"/></svg></span>최근 발송<span id="recentSendsMore" style="margin-left:auto;font-size:12px;font-weight:500;color:var(--muted-fg);cursor:pointer;" onclick="goToHistory()">전체 보기 →</span></div>
         </div>
+        <div class="res-list" id="dashRecentHist"></div>
       </div>
 
     </section>
+
 
     <!-- ─── COMPOSE ─── -->
     <section class="page" id="tab-compose">
@@ -1739,7 +1531,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v1.7.7';
+const APP_VERSION='v2.0.0';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -2679,11 +2471,77 @@ function loadReservation(id){
   _updateDateDisplay();switchTab('compose');renderPreview();
   toast(r.name+' 예약 불러왔어요 📋');
 }
+let _dashCal={y:new Date().getFullYear(),m:new Date().getMonth(),sel:null,ym:false};
+function dashCalNav(d){_dashCal.m+=d;if(_dashCal.m<0){_dashCal.m=11;_dashCal.y--;}else if(_dashCal.m>11){_dashCal.m=0;_dashCal.y++;}_dashCal.ym=false;renderDashCal();}
+function dashCalToday(){const t=new Date();_dashCal.y=t.getFullYear();_dashCal.m=t.getMonth();_dashCal.sel=null;_dashCal.ym=false;renderDashCal();}
+function dashCalYmToggle(){_dashCal.ym=!_dashCal.ym;renderDashCal();}
+function dashCalSetYM(y,m){_dashCal.y=y;_dashCal.m=m;_dashCal.ym=false;renderDashCal();}
+function dashCalYearStep(d){_dashCal.y+=d;renderDashCal();}
+function _dashYmPickerHtml(y,m){
+  const months=_MN.map((mn,i)=>`<button class="cal-ym-mbtn${i===m?' cur':''}" onclick="dashCalSetYM(${y},${i})">${mn}</button>`).join('');
+  return `<div class="cal-ym-wrap">
+    <div class="cal-ym-year">
+      <button class="cal-ym-ybtn" onclick="dashCalYearStep(-1)">‹</button>
+      <span>${y}년</span>
+      <button class="cal-ym-ybtn" onclick="dashCalYearStep(1)">›</button>
+    </div>
+    <div class="cal-ym-grid">${months}</div>
+  </div>`;
+}
+function dashCalDayClick(ds){
+  const dayRes=reservations.filter(r=>r.checkin&&r.checkout&&ds>=r.checkin&&ds<=r.checkout);
+  if(dayRes.length===1){loadReservation(dayRes[0].id);return;}
+  if(dayRes.length>1){_dashCal.sel=_dashCal.sel===ds?null:ds;renderDashCal();return;}
+}
+function renderDashCal(){
+  const host=document.getElementById('dashCalBody');if(!host)return;
+  const y=_dashCal.y,m=_dashCal.m;
+  const lblEl=document.getElementById('dashCalLabel');
+  if(lblEl)lblEl.textContent=`${y}년 ${_MN[m]}`;
+  if(_dashCal.ym){host.innerHTML=_dashYmPickerHtml(y,m);return;}
+  const today=getTodayStr();
+  const first=new Date(y,m,1).getDay();
+  const days=new Date(y,m+1,0).getDate();
+  const DOW=['일','월','화','수','목','금','토'];
+  let html='<div class="month-grid">'+DOW.map(d=>`<div class="month-dow">${d}</div>`).join('');
+  const prevDays=new Date(y,m,0).getDate();
+  for(let i=first-1;i>=0;i--){
+    html+=`<div class="month-day other-month"><div class="md-num"><span class="md-num-inner">${prevDays-i}</span></div></div>`;
+  }
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dow=(first+d-1)%7;
+    const isToday=ds===today;
+    const isSel=ds===_dashCal.sel;
+    const isSun=dow===0,isSat=dow===6,isWe=dow===5||dow===6;
+    const holi=HOLIDAYS[ds];
+    const dayRes=reservations.filter(r=>r.checkin&&r.checkout&&ds>=r.checkin&&ds<=r.checkout);
+    const cls=['month-day',isSun?'sun':isSat?'sat':'',isToday?'today':'',isSel?'selected':'',holi?'holiday':''].filter(Boolean).join(' ');
+    const dayLbl=holi?`<small class="holi-lbl">${holi}</small>`
+      :isWe?'<small class="we-lbl">주말</small>'
+      :isSun?'<small class="su-lbl">일</small>'
+      :'<small class="wd-lbl">주중</small>';
+    const chips=dayRes.slice(0,3).map(r=>{
+      const isCi=r.checkin===ds,isCo=r.checkout===ds;
+      const chipCls=isCi?'ci-day':(isCo?'co-day':'mid-day');
+      const nm=(r.name||'손님').slice(0,4);
+      const label=isCi?nm+' IN':isCo?nm+' OUT':'';
+      return `<div class="res-chip ${chipCls}">${esc(label)}</div>`;
+    }).join('');
+    const more=dayRes.length>3?`<div class="res-more">+${dayRes.length-3}</div>`:'';
+    html+=`<div class="${cls}" onclick="dashCalDayClick('${ds}')">
+      <div class="md-num"><span class="md-num-inner">${d}</span>${dayLbl}</div>
+      ${chips}${more}
+    </div>`;
+  }
+  const total=first+days;const rem=total%7===0?0:7-(total%7);
+  for(let i=1;i<=rem;i++)html+=`<div class="month-day other-month"><div class="md-num"><span class="md-num-inner">${i}</span></div></div>`;
+  html+='</div>';
+  host.innerHTML=html;
+}
+
 function renderDashboard(){
   const today=getTodayStr();
-  const DOW=['일','월','화','수','목','금','토'];
-  const d=new Date();
-  document.getElementById('dashDate').textContent=`${d.getMonth()+1}.${d.getDate()}(${DOW[d.getDay()]})`;
   const ciList=reservations.filter(r=>r.checkin===today);
   const coList=reservations.filter(r=>r.checkout===today);
   document.getElementById('dashCiNum').textContent=ciList.length;
@@ -2693,24 +2551,18 @@ function renderDashboard(){
   const now=new Date(today+'T00:00:00');
   const weekLater=new Date(now);weekLater.setDate(weekLater.getDate()+7);
   const upcoming=reservations
-    .filter(r=>{const d=new Date(r.checkin+'T00:00:00');return d>now&&d<=weekLater;})
-    .sort((a,b)=>a.checkin.localeCompare(b.checkin));
+    .filter(r=>{const d=new Date(r.checkin+'T00:00:00');return d>now&&d<=weekLater;});
   document.getElementById('dashUpNum').textContent=upcoming.length;
 
-  const allToday=[...ciList.map(r=>({...r,tag:'ci'})),...coList.filter(r=>r.checkin!==today).map(r=>({...r,tag:'co'}))];
-  const list=document.getElementById('dashList');
-  if(!allToday.length){
-    list.innerHTML='<div class="empty"><span class="emoji">🗓</span>오늘 체크인·체크아웃 예약이 없어요</div>';
-  } else {
-    list.innerHTML=allToday.map(r=>`
-      <div class="res-item" onclick="loadReservation('${r.id}')">
-        <div class="res-item-main">
-          <div class="res-item-name">${esc(r.name)}${r.guests?' · '+esc(r.guests):''}</div>
-          <div class="res-item-sub">${esc(r.phone||'')}${r.price?' · '+esc(r.price):''}</div>
-        </div>
-        <span class="res-tag ${r.tag==='ci'?'tag-ci':'tag-co'}">${r.tag==='ci'?'체크인':'체크아웃'}</span>
-      </div>`).join('');
+  const greetEl=document.getElementById('dashGreetName');
+  if(greetEl)greetEl.textContent=settings.name||'호스트';
+  const subEl=document.getElementById('dashSubInfo');
+  if(subEl){
+    const todayCount=ciList.length+coList.length;
+    subEl.textContent=`오늘 ${todayCount}건 · 7일 내 ${upcoming.length}건 · 총 ${reservations.length}건`;
   }
+
+  renderDashCal();
 
   const rhost=document.getElementById('dashRecentHist');
   if(rhost){
