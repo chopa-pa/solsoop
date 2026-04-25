@@ -580,6 +580,13 @@ input,select,textarea{font-family:inherit;}
 .res-chip.co-day{background:#f97316;border-radius:2px 6px 6px 2px;}
 .res-chip.mid-day{background:#a7f3d0;color:#065f46;border-radius:0;}
 .res-more{font-size:8px;color:var(--muted-fg);text-align:center;font-weight:600;}
+.res-dots{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;padding:2px 0;}
+.res-dot{width:10px;height:10px;border-radius:50%;display:inline-block;box-sizing:border-box;}
+.res-dot.mid{width:6px;height:6px;opacity:.75;align-self:center;}
+@media(max-width:640px){
+  .res-dot{width:8px;height:8px;}
+  .res-dot.mid{width:5px;height:5px;}
+}
 @media(max-width:640px){
   .cal-card{padding:12px;}
   .cal-page-title{font-size:16px;}
@@ -1758,7 +1765,7 @@ input,select,textarea{font-family:inherit;}
 <div class="toast" id="toast"></div>
 
 <script>
-const APP_VERSION='v2.2.9';
+const APP_VERSION='v2.3.0';
 const SK_SET='stay_msg_lite1_set_v1';
 const SK_TPL='stay_msg_lite1_tpl_v1';
 const SK_RES='stay_msg_lite1_res_v1';
@@ -2945,7 +2952,8 @@ function renderDashCal(){
       :isWe?'<small class="we-lbl">주말</small>'
       :isSun?'<small class="su-lbl">일</small>'
       :'<small class="wd-lbl">주중</small>';
-    const chips=dayRes.slice(0,3).map(r=>{
+    const useChips=dayRes.length<=3;
+    const chips=useChips?dayRes.map(r=>{
       const isCi=r.checkin===ds,isCo=r.checkout===ds;
       const c=roomColor(r.roomId);
       const isMid=!isCi&&!isCo;
@@ -2955,8 +2963,16 @@ function renderDashCal(){
       const nm=(r.name||'손님').slice(0,4);
       const label=isCi?nm+' IN':isCo?nm+' OUT':'';
       return `<div class="res-chip" style="background:${bg};color:${fg};border-radius:${radius};">${esc(label)}</div>`;
-    }).join('');
-    const more=dayRes.length>3?`<div class="res-more">+${dayRes.length-3}</div>`:'';
+    }).join(''):`<div class="res-dots">${dayRes.map(r=>{
+      const isCi=r.checkin===ds,isCo=r.checkout===ds;
+      const c=roomColor(r.roomId);
+      const isMid=!isCi&&!isCo;
+      const cls='res-dot'+(isMid?' mid':'');
+      const style=isCo?`background:#fff;border:2px solid ${c.bg};`:`background:${c.bg};`;
+      const tip=esc((r.name||'손님')+(isCi?' IN':isCo?' OUT':''));
+      return `<span class="${cls}" style="${style}" title="${tip}"></span>`;
+    }).join('')}</div>`;
+    const more='';
     html+=`<div class="${cls}" onclick="dashCalDayClick('${ds}')">
       <div class="md-num"><span class="md-num-inner">${d}</span>${dayLbl}</div>
       ${chips}${more}
